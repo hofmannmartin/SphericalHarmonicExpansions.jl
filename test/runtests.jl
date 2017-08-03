@@ -1,5 +1,4 @@
-using SphericalHarmonics
+using SphericalHarmonics, MultivariatePolynomials
 using Base.Test
 
-# write your own tests here
-@test 1 == 2
+include("ylm.jl")
