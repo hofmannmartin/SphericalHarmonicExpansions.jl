@@ -1,5 +1,5 @@
 @testset "SphericalHarmonics" begin
-  ɛ = eps(Float64);
+  ɛ = eps(Float64)
   @polyvar x y z
   # l = 0
   #Y_{0,0} = √{\frac{1}{4π}}
