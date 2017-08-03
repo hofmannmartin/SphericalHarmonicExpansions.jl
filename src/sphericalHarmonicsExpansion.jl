@@ -13,8 +13,8 @@ function sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::PolyVar{true}, y:
 
     for l in 0:L
       for m in -l:l
-        if Clm[((l-1)^2+2(l-1)+1)+l+m+1] != 0
-          sum += Clm[((l-1)^2+2(l-1)+1)+l+m+1] * ylm(l,m,x,y,z)
+        if Clm[l*(l+1)+m+1] != 0
+          sum += Clm[l*(l+1)+m+1] * ylm(l,m,x,y,z)
         end
       end
     end
