@@ -2,9 +2,7 @@ module SphericalHarmonics
 
 using MultivariatePolynomials
 
-@polyvar x y z
-
-include("ylm.jl")
+include("sphericalHarmonics.jl")
 export ylm
 
 end # module
