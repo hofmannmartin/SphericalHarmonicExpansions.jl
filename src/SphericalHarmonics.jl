@@ -3,7 +3,9 @@ module SphericalHarmonics
 using MultivariatePolynomials
 
 include("sphericalHarmonics.jl")
+export ylm
+
 include("sphericalHarmonicsExpansion.jl")
-export ylm, sphericalHarmonicsExpansion
+export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients
 
 end # module
