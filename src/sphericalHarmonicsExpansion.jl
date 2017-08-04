@@ -1,8 +1,9 @@
 
 """
     sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
-*Description:*  Calculation of the spherical harmonics expansion for given coefficients in Cartesian coordinates\\
-*Input:*  `Clm`       - Array with coefficients\\
+*Description:*  Calculation of the spherical harmonics expansion in Cartesian coordinates
+                for given coefficients which define the maximum degree of the spherical harmonics\\
+*Input:*  `Clm`       - Array with coefficients (length = (l+1)², l = max. deg. of the spherical harmonics)\\
           `x, y, z`   - Cartesian coordinates\\
 *Output:*  Spherical harmonics expansion
 """
