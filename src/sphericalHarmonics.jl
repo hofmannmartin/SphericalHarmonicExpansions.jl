@@ -29,10 +29,13 @@ function ylmSinSinPolynomial(m::Int64, x::PolyVar{true}, y::PolyVar{true})
 end
 
 """
-`ylm(l::Int64, m::Int64, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})`\\
+    ylm(l::Int64, m::Int64, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
 *Description:*  Calculation of the spherical harmonic for a given order (l,m) in Cartesian coordinates\\
-*Input:*  `l, m`      - Order of the spherical harmonic\\
-          `x, y, z`   - Cartesian coordinates\\
+
+*Input:*  `l`       - Degree of the spherical harmonic\\
+          `m`       - Order of the spherical harmonic\\
+          `x, y, z` - Cartesian coordinates\\
+
 *Output:*  Spherical harmonic polynomial
 """
 function ylm(l::Int64, m::Int64, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
@@ -45,7 +48,7 @@ function ylm(l::Int64, m::Int64, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{
     p = (z^2 - 1)^l
 
     for i = 1:l+abs(m)
-      c = i <= l ? 1/(2*i) : -1.0
+      c = i <= l ? 1/(2*i) : 1.0
       p = c*differentiate(p, z)
     end
 
