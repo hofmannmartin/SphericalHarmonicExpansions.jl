@@ -2,13 +2,11 @@
   ɛ = eps(Float64)
   @polyvar x y z
 
-  # Test mit Einheitsvektoren für c
-  #Test by using unit vectors C
+  #Test by using unit vectors
   #l = 10 -> size(C) = l²+2l+1 = 121
   for l in 0:10
     for m in -l:l
       C = zeros(121);
-      #((l-1)^2+2(l-1)+1)+l+m+1
       C[l*(l+1)+m+1] = 1;
       @test isapprox(sphericalHarmonicsExpansion(C,x,y,z),ylm(l,m,x,y,z),atol=ɛ)
     end
