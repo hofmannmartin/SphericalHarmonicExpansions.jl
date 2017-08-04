@@ -1,4 +1,4 @@
-@testset "SphericalHarmonicsExpansion" begin
+@testset "spherical harmonics expansion" begin
   ɛ = eps(Float64)
   @polyvar x y z
 
