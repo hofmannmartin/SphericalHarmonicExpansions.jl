@@ -31,16 +31,18 @@ end
 """
     ylm(l::Int64, m::Int64, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
 *Description:*  Calculation of the spherical harmonic for a given order (l,m) in Cartesian coordinates\\
+
 *Input:*  `l`       - Degree of the spherical harmonic\\
           `m`       - Order of the spherical harmonic\\
           `x, y, z` - Cartesian coordinates\\
+
 *Output:*  Spherical harmonic polynomial
 """
 function ylm(l::Int64, m::Int64, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
 
   if abs(m) > l
     println("-l <= m <= l expected, but m = $m and l = $l.")
-    error(BoundsError)
+    throw(BoundsError())
   else
 
     p = (z^2 - 1)^l
