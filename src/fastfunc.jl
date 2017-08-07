@@ -6,6 +6,7 @@
     may violate strict IEEE semantics.
 
     # Examples
+    ```
     julia> using MultivariatePolynomials
 
     julia> @polyvar x y z
@@ -19,6 +20,7 @@
 
     julia> foo(1.0,2.0,3.0)
     1.19574825e7
+    ```
     """
 macro fastfunc(functionname::String,polynomial)
 	polystr = string(eval(polynomial))
