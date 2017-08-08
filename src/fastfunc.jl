@@ -6,16 +6,16 @@
     may violate strict IEEE semantics.
 
     # Examples
-    julia> `using MultivariatePolynomials`
+    ```
+    julia> using MultivariatePolynomials
 
-    julia> `@polyvar x y z;`
+    julia> p = 15.0*x*y^2+7.5*x*z^13;
 
-    julia> `p = 15.0*x*y^2+7.5*x*z^13`;
-    
-    julia> `foo = @fastfunc p;`
-    
-    julia> `foo(1.0,2.0,3.0)`
-    `1.19574825e7`
+    julia> @fastfunc "foo" p;
+
+    julia> foo(1.0,2.0,3.0)
+    1.19574825e7
+    ```
     """
 macro fastfunc(polynomial)
 	return quote
