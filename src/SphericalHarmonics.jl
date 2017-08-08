@@ -11,4 +11,7 @@ export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients
 include("fasteval.jl")
 export @fasteval
 
+include("sphericalQuadrature.jl")
+export sphericalQuadrature
+
 end # module
