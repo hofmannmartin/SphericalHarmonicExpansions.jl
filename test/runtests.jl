@@ -3,4 +3,4 @@ using Base.Test
 
 include("sphericalHarmonics.jl")
 include("sphericalHarmonicsExpansion.jl")
-include("fasteval.jl")
+include("fastfunc.jl")
