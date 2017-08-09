@@ -1,6 +1,8 @@
+__precompile__()
 module SphericalHarmonics
 
-using MultivariatePolynomials
+using Reexport
+@reexport using MultivariatePolynomials
 
 include("sphericalHarmonics.jl")
 export ylm
