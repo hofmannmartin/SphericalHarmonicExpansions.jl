@@ -1,3 +1,4 @@
+import Base.setindex!, Base.getindex, Base.isapprox
 
 type SphericalHarmonicCoefficients
   c::Vector{T} where T<:Real
@@ -23,11 +24,9 @@ type SphericalHarmonicCoefficients
   end
 end
 
-import Base.getindex
+isapprox(shc1::SphericalHarmonicCoefficients, shc2::SphericalHarmonicCoefficients; kargs...) = isapprox(shc1.c,shc2.c,kargs...)
 getindex(shc::SphericalHarmonicCoefficients,I) = getindex(shc.c,I)
 getindex(shc::SphericalHarmonicCoefficients,l,m) = getindex(shc.c, l*(l+1)+m+1)
-
-import Base.setindex!
 setindex!(shc::SphericalHarmonicCoefficients,value,I) = setindex!(shc.c,value,I)
 setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,l*(l+1)+m+1)
 
