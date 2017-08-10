@@ -1,4 +1,4 @@
-import Base.setindex!, Base.getindex, Base.isapprox
+import Base.setindex!, Base.getindex, Base.isapprox, Base.==, Base.!=
 
 type SphericalHarmonicCoefficients
   c::Vector{T} where T<:Real
@@ -28,11 +28,7 @@ getindex(shc::SphericalHarmonicCoefficients,I) = getindex(shc.c,I)
 getindex(shc::SphericalHarmonicCoefficients,l,m) = getindex(shc.c, l*(l+1)+m+1)
 setindex!(shc::SphericalHarmonicCoefficients,value,I) = setindex!(shc.c,value,I)
 setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,l*(l+1)+m+1)
-
-import Base.==
 ==(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = (shca.c == shcb.c ? true : false)
-
-import Base.!=
 !=(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = (shca.c != shcb.c ? true : false)
 """
     sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
