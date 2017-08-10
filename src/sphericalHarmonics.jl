@@ -39,30 +39,24 @@ end
 *Output:*  Spherical harmonic polynomial
 """
 function ylm(l::Int64, m::Int64, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
-
+  
   if abs(m) > l
     println("-l <= m <= l expected, but m = $m and l = $l.")
     throw(BoundsError())
+  end
+  
+  p = (z^2 - 1)^l
+  
+  for i = 1:l+abs(m)
+    c = i <= l ? 1/(2*i) : 1.0
+    p = c*differentiate(p, z)
+  end
+  
+  if m > 0
+    return sqrt(2)*ylmKCoefficient(l, m)*ylmCosSinPolynomial(m,x,y)*p
+  elseif m < 0
+    return sqrt(2)*ylmKCoefficient(l, abs(m))*ylmSinSinPolynomial(abs(m),x,y)*p
   else
-
-    p = (z^2 - 1)^l
-
-    for i = 1:l+abs(m)
-      c = i <= l ? 1/(2*i) : 1.0
-      p = c*differentiate(p, z)
-    end
-
-    if m > 0
-      return sqrt(2)*ylmKCoefficient(l, m)*ylmCosSinPolynomial(m,x,y)*p
-
-    elseif m < 0
-      return sqrt(2)*ylmKCoefficient(l, abs(m))*ylmSinSinPolynomial(abs(m),x,y)*p
-
-    elseif m == 0
-      return ylmKCoefficient(l, 0)*p
-
-    else
-      println("Error!")
-    end
+    return ylmKCoefficient(l, 0)*p
   end
 end

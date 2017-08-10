@@ -3,41 +3,46 @@
   @polyvar x y z
 
   @test_throws DomainError SphericalHarmonicCoefficients(-2)
-  @test_throws DomainError SphericalHarmonicCoefficients([1;2;3;4;5])
+  @test_throws DomainError SphericalHarmonicCoefficients([1,2,3,4,5])
 
   c1 = SphericalHarmonicCoefficients(2)
-  c2 = SphericalHarmonicCoefficients([1;2;3;4])
+  c2 = SphericalHarmonicCoefficients([1,2,3,4])
+  c3 = SphericalHarmonicCoefficients([1+ε,2,3,4])
+  c4 = SphericalHarmonicCoefficients([3,2,3,4])
 
-  @test isapprox(length(c1.c),9,atol=ɛ)
-  @test isapprox(c2.L, 1)
+  @test isapprox(c2,c3)
+  @test !isapprox(c2,c4)
 
-  @test isapprox(c2[1],1,atol=ɛ)
-  @test isapprox(c2[2],2,atol=ɛ)
-  @test isapprox(c2[3],3,atol=ɛ)
-  @test isapprox(c2[4],4,atol=ɛ)
+  @test length(c1.c) == 9
+  @test c2.L == 1
 
-  @test isapprox(c2[0,0],1,atol=ɛ)
-  @test isapprox(c2[1,-1],2,atol=ɛ)
-  @test isapprox(c2[1,0],3,atol=ɛ)
-  @test isapprox(c2[1,1],4,atol=ɛ)
+  @test c2[1] == 1
+  @test c2[2] == 2
+  @test c2[3] == 3
+  @test c2[4] == 4
+
+  @test c2[0,0] == 1
+  @test c2[1,-1] == 2
+  @test c2[1,0] == 3
+  @test c2[1,1] == 4
 
   c2[1] = 10
   c2[2] = 20
   c2[3] = 30
   c2[4] = 40
-  @test isapprox(c2[1],10,atol=ɛ)
-  @test isapprox(c2[2],20,atol=ɛ)
-  @test isapprox(c2[3],30,atol=ɛ)
-  @test isapprox(c2[4],40,atol=ɛ)
+  @test c2[1] == 10
+  @test c2[2] == 20
+  @test c2[3] == 30
+  @test c2[4] == 40
 
   c2[0,0] = 100
   c2[1,-1] = 200
   c2[1,0] = 300
   c2[1,1] = 400
-  @test isapprox(c2[1],100,atol=ɛ)
-  @test isapprox(c2[2],200,atol=ɛ)
-  @test isapprox(c2[3],300,atol=ɛ)
-  @test isapprox(c2[4],400,atol=ɛ)
+  @test c2[1] == 100
+  @test c2[2] == 200
+  @test c2[3] == 300
+  @test c2[4] == 400
 
   #Test by using unit vectors
   #l = 10 -> size(C) = l²+2l+1 = 121
