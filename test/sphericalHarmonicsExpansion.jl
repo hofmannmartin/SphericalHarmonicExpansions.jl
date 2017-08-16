@@ -10,6 +10,8 @@
   c3 = SphericalHarmonicCoefficients([1+ε,2,3,4])
   c4 = SphericalHarmonicCoefficients([3,2,3,4])
 
+  @test c2==c2
+  @test c2!=c3
   @test isapprox(c2,c3)
   @test !isapprox(c2,c4)
 

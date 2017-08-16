@@ -28,8 +28,8 @@ getindex(shc::SphericalHarmonicCoefficients,I) = getindex(shc.c,I)
 getindex(shc::SphericalHarmonicCoefficients,l,m) = getindex(shc.c, l*(l+1)+m+1)
 setindex!(shc::SphericalHarmonicCoefficients,value,I) = setindex!(shc.c,value,I)
 setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,l*(l+1)+m+1)
-==(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = (shca.c == shcb.c ? true : false)
-!=(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = (shca.c != shcb.c ? true : false)
+==(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = shca.c == shcb.c
+!=(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = shca.c != shcb.c
 """
     sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
 *Description:*  Calculation of the spherical harmonics expansion in Cartesian coordinates
