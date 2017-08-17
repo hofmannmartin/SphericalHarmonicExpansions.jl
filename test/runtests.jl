@@ -1,4 +1,4 @@
-using SphericalHarmonics, MultivariatePolynomials
+using SphericalHarmonics
 using Base.Test
 
 include("sphericalHarmonics.jl")
