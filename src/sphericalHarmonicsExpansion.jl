@@ -31,21 +31,21 @@ setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,
 ==(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = shca.c == shcb.c
 !=(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = shca.c != shcb.c
 """
-    sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
+    sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::Variable, y::Variable, z::Variable)
 *Description:*  Calculation of the spherical harmonics expansion in Cartesian coordinates
                 for given coefficients which define the maximum degree of the spherical harmonics\\
 *Input:*  `Clm`       - Array with coefficients (length = (l+1)², l = max. deg. of the spherical harmonics)\\
           `x, y, z`   - Cartesian coordinates\\
 *Output:*  Spherical harmonics expansion
 """
-function sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, x::PolyVar{true}, y::PolyVar{true}, z::PolyVar{true})
+function sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, r::Variable, x::Variable, y::Variable, z::Variable)
 
   sum = 0
 
   for l in 0:Clm.L
     for m in -l:l
       if Clm[l,m] != 0
-        sum += Clm[l,m] * ylm(l,m,x,y,z)
+        sum += Clm[l,m] * addRl(l,ylm(l,m,x,y,z)+0*r,r);
       end
     end
   end
