@@ -51,8 +51,8 @@
 
   for l in 0:2
     for m in -l:l
-      C = SphericalHarmonicCoefficients(2);
-      C[l,m] = 1;
+      C = SphericalHarmonicCoefficients(2)
+      C[l,m] = 1
       @test isapprox(sphericalHarmonicsExpansion(C,x,y,z),sqrt((2*l+1)/(4*pi))*rlm(l,m,x,y,z),atol=ɛ)
     end
   end
