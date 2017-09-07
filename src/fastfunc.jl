@@ -20,13 +20,19 @@
 macro fastfunc(polynomial)
 	return quote
 		local polystr = string($(esc(polynomial)))
-		local variables = string(tuple(vars($(esc(polynomial)))...))
+		local vars = string(tuple(variables($(esc(polynomial)))...))
 		# insert "*" in between numbers and variables
-		local regex = Regex("(\\d)" * replace(variables,", ","|"))
+		local regex = Regex("(\\d)" * replace(vars,", ","|"))
 		polystr = replace(polystr,regex,s"\1*\2")
+		# insert "*" in between variables "xy" -> "x*y"
+		local regex_xy = Regex(replace(vars,", ","|")*replace(vars,", ","|"))
+		for i=1:length(variables($(esc(polynomial))))-1
+			polystr = replace(polystr,regex_xy,s"\1*\2")
+		end
 		# replace "+ -" with "- "
 		polystr = replace(polystr,r"([+])(\s)([-])",s"\3 ")
 		# create expression for function definition
-		eval(parse(variables*" -> @fastmath "*polystr))
+
+		eval(parse(vars*" -> @fastmath "*polystr))
 	end
 end
