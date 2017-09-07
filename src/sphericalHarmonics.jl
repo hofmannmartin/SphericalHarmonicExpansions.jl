@@ -9,7 +9,6 @@ function ylmKCoefficient(l::Int64, m::Int64)
   return sqrt((2*l+1) / (4*pi*k))
 end
 
-#
 function ylmCosSinPolynomial(m::Int64, x::Variable, y::Variable)
 
   sum = 0
@@ -59,4 +58,25 @@ function ylm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
   else
     return ylmKCoefficient(l, 0)*p
   end
+end
+
+# multiplying r^l*ylm(x,y,z)
+function rlylm(l::Int64, m::Int, x::Variable, y::Variable, z::Variable)
+	p = ylm(l,m,x,y,z)
+	tout = []
+	# Zerlegung des Polynoms in Terme:
+	for t in terms(p)
+		deg = degree(monomial(t)) # Gibt den gesamten Grad des Monoms an
+		degR = l-deg # durch das Kürzen ergibt sich ein Grad von l-deg fuer r
+		push!(tout,(x^2+y^2+z^2)^Int(degR/2)*t) # r² wird durch x²+y²+z² ersetzt
+	end
+	
+	return polynomial(tout)
+end
+
+# solid harmonics
+function rlm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
+	rlm = rlylm(l,m,x,y,z)
+	rlm = sqrt(4*pi/(2*l+1))*rlm
+	return rlm
 end

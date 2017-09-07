@@ -12,7 +12,7 @@ end
 @reexport using TypedPolynomials
 
 include("sphericalHarmonics.jl")
-export ylm
+export ylm, rlm
 
 include("sphericalHarmonicsExpansion.jl")
 export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients

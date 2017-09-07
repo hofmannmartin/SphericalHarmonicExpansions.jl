@@ -23,7 +23,7 @@ type SphericalHarmonicCoefficients
   end
 end
 
-isapprox(shc1::SphericalHarmonicCoefficients, shc2::SphericalHarmonicCoefficients; kargs...) = isapprox(shc1.c,shc2.c,kargs...)
+isapprox(shc1::SphericalHarmonicCoefficients, shc2::SphericalHarmonicCoefficients; kargs...) = isapprox(shc1.c,shc2.c;kargs...)
 getindex(shc::SphericalHarmonicCoefficients,I) = getindex(shc.c,I)
 getindex(shc::SphericalHarmonicCoefficients,l,m) = getindex(shc.c, l*(l+1)+m+1)
 setindex!(shc::SphericalHarmonicCoefficients,value,I) = setindex!(shc.c,value,I)
@@ -38,14 +38,14 @@ setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,
           `x, y, z`   - Cartesian coordinates\\
 *Output:*  Spherical harmonics expansion
 """
-function sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, r::Variable, x::Variable, y::Variable, z::Variable)
+function sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, x::Variable, y::Variable, z::Variable)
 
   sum = 0
 
   for l in 0:Clm.L
     for m in -l:l
       if Clm[l,m] != 0
-        sum += Clm[l,m] * addRl(l,ylm(l,m,x,y,z)+0*r,r);
+        sum += Clm[l,m] * rlylm(l,m,x,y,z)
       end
     end
   end
