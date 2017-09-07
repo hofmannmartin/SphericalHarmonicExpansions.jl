@@ -2,7 +2,13 @@ __precompile__()
 module SphericalHarmonics
 
 using Reexport
+
 using MultivariatePolynomials
+
+if !isdir(Pkg.dir("TypedPolynomials"))
+    println("Installing TypedPolynomials...")
+    Pkg.clone("https://github.com/rdeits/TypedPolynomials.jl.git")
+end
 @reexport using TypedPolynomials
 
 include("sphericalHarmonics.jl")
