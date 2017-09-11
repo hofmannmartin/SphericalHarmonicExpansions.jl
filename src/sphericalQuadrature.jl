@@ -1,5 +1,7 @@
 
-function discreteIntegration(values::Array{Float64,1}, coordinates::Array{Float64,2}, l::Int, m::Int, x::Variable, y::Variable, z::Variable)
+function discreteIntegration(values::Array{Float64,1}, coordinates::Array{Float64,2}, l::Int, m::Int)
+
+  @polyvar x y z
 
   sum = 0
   p = ylm(l,m,x,y,z)
@@ -13,7 +15,6 @@ end
 
 function sphericalQuadrature(values::Array{Float64,1}, coordinates::Array{Float64,2}, L)
 
-  @polyvar x y z
-  C = [discreteIntegration(values,coordinates,l,m,x,y,z) for l=0:L for m=-l:l]
+  C = [discreteIntegration(values,coordinates,l,m) for l=0:L for m=-l:l]
   return SphericalHarmonicCoefficients(C)
 end
