@@ -24,6 +24,6 @@ include("sphericalQuadrature.jl")
 export sphericalQuadrature
 
 include("translation.jl")
-export addRl, rlm
+export translation, translateRlm
 
 end # module
