@@ -1,11 +1,20 @@
 # Translation of the coefficients c by a vector v
-function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable)
+function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable,calcSolid::Bool=false)
 
     c = SphericalHarmonicCoefficients(zeros((C.L+1)^2))
 
     vx = v[1]
     vy = v[2]
     vz = v[3]
+
+    if calcSolid
+        for l = 0:C.L
+            for m = -l:l
+                # turn solid coefficients into spherical coefficients
+                C[l,m] *= sqrt(4*pi/(2*l+1))
+            end
+        end
+    end
 
     # c₀₀:
     sum = 0
@@ -166,6 +175,15 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
         end
     end
 
+    if calcSolid
+        for l = 0:c.L
+            for m = -l:l
+                # turn spherical coefficients into solid coefficients
+                c[l,m] /= sqrt(4*pi/(2*l+1))
+            end
+        end
+    end
+
     return c
 end
 
@@ -275,80 +293,238 @@ function translateRlm(l::Int64, m::Int64,vx,vy,vz, x::Variable, y::Variable, z::
         for λ=0:l
             for μ=max(m,-λ):min(0,-λ+l+m)
                 if μ == 0 # => m-μ = m < 0
-                    p = rlm(l-λ,m,x,y,z);
+                    p = rlm(l-λ,-abs(m),x,y,z);
                     mult = (-1)^m/(factorial(λ)*sqrt(2*factorial(l-λ+m)*factorial(l-λ-m)));
                     sum1 = rlm(λ,0,x,y,z)*p((x,y,z)=>(vx,vy,vz));
-                    Rlmt += mult*sum1;
+                    Rlmt += (-1)*mult*sum1;
                 elseif μ == m # => m-μ = 0
                     p = rlm(l-λ,0,x,y,z);
                     mult = (-1)^m/(factorial(l-λ)*sqrt(2*factorial(λ+m)factorial(λ-m)));
-                    sum1 = rlm(λ,m,x,y,z)*p((x,y,z)=>(vx,vy,vz));
-                    Rlmt += mult*sum1;
+                    sum1 = rlm(λ,-abs(m),x,y,z)*p((x,y,z)=>(vx,vy,vz));
+                    Rlmt += (-1)*mult*sum1;
                 else # μ < 0, m-μ < 0
-                    p = rlm(l-λ,(m-μ),x,y,z);
-                    q = rlm(l-λ,-(m-μ),x,y,z);
+                    p = rlm(l-λ,abs(m-μ),x,y,z);
+                    q = rlm(l-λ,-abs(m-μ),x,y,z);
                     mult = (-1)^m/sqrt(4*factorial(λ+μ)*factorial(λ-μ)*factorial(l-λ+(m-μ))*factorial(l-λ-(m-μ)));
-                    sum1 = rlm(λ,abs(μ),x,y,z)*p((x,y,z)=>(vx,vy,vz));
-                    sum2 = rlm(λ,-abs(μ),x,y,z)*q((x,y,z)=>(vx,vy,vz));
-                    Rlmt += mult*(sum1 + sum2);
+                    sum1 = rlm(λ,-abs(μ),x,y,z)*p((x,y,z)=>(vx,vy,vz));
+                    sum2 = rlm(λ,abs(μ),x,y,z)*q((x,y,z)=>(vx,vy,vz));
+                    Rlmt += (-1)*mult*(sum1 + sum2);
                 end
             end
         end
 
         for λ=-m+1:l-1
             for μ=max(-λ,λ-l+m):m-1 # μ < 0, m-μ > 0
-                p = rlm(l-λ,m-μ,x,y,z);
-                q = rlm(l-λ,-(m-μ),x,y,z);
+                p = rlm(l-λ,-(m-μ),x,y,z);
+                q = rlm(l-λ,(m-μ),x,y,z);
                 mult = (-1)^(μ)/sqrt(4*factorial(λ+μ)*factorial(λ-μ)*factorial(l-λ+m-μ)*factorial(l-λ-(m-μ)));
-                sum1 = rlm(λ,μ,x,y,z)*p((x,y,z)=>(vx,vy,vz));
-                sum2 = rlm(λ,-μ,x,y,z)*q((x,y,z)=>(vx,vy,vz));
+                sum1 = rlm(λ,abs(μ),x,y,z)*p((x,y,z)=>(vx,vy,vz));
+                sum2 = rlm(λ,-abs(μ),x,y,z)*q((x,y,z)=>(vx,vy,vz));
                 Rlmt += mult*(sum1 - sum2);
             end
         end
 
         for λ=1:l+m-1
             for μ=1:min(λ,-λ+l+m) # μ > 0, m-μ < 0
-                p = rlm(l-λ,(m-μ),x,y,z);
-                q = rlm(l-λ,-(m-μ),x,y,z);
+                p = rlm(l-λ,abs(m-μ),x,y,z);
+                q = rlm(l-λ,-abs(m-μ),x,y,z);
                 mult = (-1)^(m-μ)/sqrt(4*factorial(λ+μ)*factorial(λ-μ)*factorial(l-λ+(m-μ))*factorial(l-λ-(m-μ)));
-                sum1 = rlm(λ,μ,x,y,z)*p((x,y,z)=>(vx,vy,vz));
-                sum2 = rlm(λ,-μ,x,y,z)*q((x,y,z)=>(vx,vy,vz));
+                sum1 = rlm(λ,-μ,x,y,z)*p((x,y,z)=>(vx,vy,vz));
+                sum2 = rlm(λ,μ,x,y,z)*q((x,y,z)=>(vx,vy,vz));
                 Rlmt += mult*(sum1 - sum2);
             end
         end
 
-        Rlmt *= (-1)^m*sqrt(2*factorial(l-abs(m))*factorial(l+abs(m)));
-
-    # else # m = 0
-    #     for λ=0:l
-    #         # μ = 0
-    #         p = rlm(l-λ,0,x,y,z);
-    #         mult = 1/(factorial(λ)*factorial(l-λ));
-    #         sum1 = rlm(λ,0,x,y,z)*p((x,y,z)=>(vx,vy,vz));
-    #         Rlmt += mult*sum1;
-    #     end
-    #
-    #     for λ=1:l-1
-    #         for μ=1:min(λ,-λ+l) # μ > 0, m-μ = -μ < 0
-    #             p = rlm(l-λ,μ,x,y,z);
-    #             q = rlm(l-λ,-μ,x,y,z);
-    #             mult = (-1)^(μ)/sqrt(4*factorial(λ+μ)*factorial(λ-μ)*factorial(l-λ+μ)*factorial(l-λ-μ));
-    #             sum1 = rlm(λ,μ,x,y,z)*p((x,y,z)=>(vx,vy,vz));
-    #             sum2 = rlm(λ,-μ,x,y,z)*q((x,y,z)=>(vx,vy,vz));
-    #             Rlmt += mult*(sum1 + sum2);
-    #         end
-    #
-    #         for μ=max(-λ,λ-l):-1 # μ < 0, m-μ = -μ > 0
-    #             p = rlm(l-λ,-μ,x,y,z);
-    #             q = rlm(l-λ,μ,x,y,z);
-    #             mult = (-1)^(μ)/sqrt(4*factorial(λ-μ)*factorial(λ+μ)*factorial(l-λ-μ)*factorial(l-λ+μ));
-    #             sum1 = rlm(λ,-μ,x,y,z)*p((x,y,z)=>(vx,vy,vz));
-    #             sum2 = rlm(λ,μ,x,y,z)*q((x,y,z)=>(vx,vy,vz));
-    #             Rlmt += mult*(sum1 + sum2);
-    #         end
-    #     end
-    #
-    #     Rlmt *= factorial(l);
+        Rlmt *= (-1)*(-1)^m*sqrt(2*factorial(l-abs(m))*factorial(l+abs(m)));
     end
     return Rlmt
+end
+
+# Error propagation
+function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable, calcSolid::Bool=false)
+
+    c = SphericalHarmonicCoefficients(zeros((C.L+1)^2))
+
+    vx = v[1]
+    vy = v[2]
+    vz = v[3]
+
+    if calcSolid
+        for l = 0:C.L
+            for m = -l:l
+                # turn solid coefficients into spherical coefficients
+                C[l,m] *= sqrt(4*pi/(2*l+1))
+            end
+        end
+    end
+
+    # c₀₀:
+    sum = 0
+    # Summand aus (I) - m > 0
+    for λ=1:C.L
+        for μ = 1:λ
+            p = rlm(λ,μ,x,y,z)
+            sum += abs(ω₊(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))
+        end
+    end
+    # Summand aus (II) - m = 0
+    for λ=0:C.L
+        p = rlm(λ,0,x,y,z)
+        sum += abs(ω₀(C[λ,0],λ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))
+    end
+    # Summand aus (III) - m < 0
+    for λ=1:C.L
+        for μ = -λ:-1
+            p = rlm(λ,μ,x,y,z)
+            sum += abs(ω₋(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))
+        end
+    end
+    c[0,0] = sqrt(4*pi)*sum
+    sum = 0
+
+    # cₗ₀ (l > 0):
+    for l=1:C.L
+        # Summand aus (I) - m > 0
+        for λ=l:C.L
+            for μ = 1:λ-l
+                p = rlm(λ-l,μ,x,y,z)
+                sum += abs(ω₊(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))
+            end
+        end
+        # Summand aus (II) - m = 0
+        for λ=l:C.L
+            p = rlm(λ-l,0,x,y,z)
+            sum += abs(ω₀(C[λ,0],λ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))
+        end
+        # Summand aus (III) - m < 0
+        for λ=l:C.L
+            for μ = -(λ-l):-1
+                p = rlm(λ-l,μ,x,y,z)
+                sum += abs(ω₋(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))
+            end
+        end
+        c[l,0] = sqrt(4*pi/(2*l+1))*sum
+        sum = 0
+    end
+
+    # cₗₘ für l ≠ 0, m > 0
+    for l=1:C.L
+        for m=1:l
+            # 1: Summand 1 aus (I) - m > 0
+            for λ=l:C.L
+                for μ = m:m-(l-λ)
+                    p = rlm(λ-l,μ-m,x,y,z)
+                    sum += abs(ω₊(C[λ,μ],λ,μ,l,m,1)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 2: Summand 2 aus (I) - m > 0
+            for λ=l+1:C.L
+                for μ = max(1,m-(λ-l)):m-1
+                    p = rlm(λ-l,abs(μ-m),x,y,z)
+                    sum += abs(ω₊(C[λ,μ],λ,μ,l,m,2)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 3: Summand 3 aus (I) - m > 0
+            for λ=l+1:C.L
+                for μ = 1:-m-(l-λ)
+                    p = rlm(λ-l,μ+m,x,y,z)
+                    sum += abs(ω₊(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 4: Summand aus (II) - m = 0
+            for λ=m+l:C.L
+                p = rlm(λ-l,m,x,y,z)
+                sum += abs((ω₀(C[λ,0],λ,l,m,2)+ω₀(C[λ,0],λ,l,-m,3))*p((x,y,z)=>(vx,vy,vz)))
+            end
+            # 5: Summand 1 aus (III) - m < 0
+            for λ=l:C.L
+                for μ = -m-(λ-l):-m-1 #min(-1,-m)
+                    p = rlm(λ-l,μ+m,x,y,z)
+                    sum += abs(ω₋(C[λ,μ],λ,μ,l,-m,1)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 6: Summand 2 aus (III) - m < 0
+            for λ=l+1:C.L
+                for μ = -m+1:min(-1,-m-(l-λ))
+                    p = rlm(λ-l,-(μ+m),x,y,z)
+                    sum += abs(ω₋(C[λ,μ],λ,μ,l,-m,2)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 7: Summand 3 aus (III) - m < 0
+            for λ=l+1:C.L
+                for μ = m-(λ-l):-1
+                    p = rlm(λ-l,μ-m,x,y,z)
+                    sum += abs(ω₋(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            c[l,m] = sqrt(4*pi/(2*l+1))*sum
+            sum = 0
+        end
+    end
+
+    # cₗₘ für l ≠ 0, m < 0
+    for l=1:C.L
+        for m=-l:-1
+            # 1: Summand 1 aus (I) - m > 0
+            for λ=l:C.L
+                for μ = -m+1:-m-(l-λ)
+                    p = rlm(λ-l,-(μ+m),x,y,z)
+                    sum += abs(ω₊(C[λ,μ],λ,μ,l,-m,1)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 2: Summand 2 aus (I) - m > 0
+            for λ=l+1:C.L
+                for μ = max(1,-m-(λ-l)):-m-1
+                    p = rlm(λ-l,-abs(μ+m),x,y,z)
+                    sum += abs(ω₊(C[λ,μ],λ,μ,l,-m,2)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 3: Summand 3 aus (I) - m > 0
+            for λ=l+1:C.L
+                for μ = 1:m-(l-λ)
+                    p = rlm(λ-l,-(μ-m),x,y,z)
+                    sum += abs(ω₊(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 4: Summand aus (II) - m = 0
+            for λ=l-m:C.L
+                p = rlm(λ-l,m,x,y,z)
+                sum += abs((ω₀(C[λ,0],λ,l,-m,2)+ω₀(C[λ,0],λ,l,m,3))*p((x,y,z)=>(vx,vy,vz)))
+            end
+            # 5: Summand 1 aus (III) - m < 0
+            for λ=l:C.L
+                for μ = m-(λ-l):m#-1 #min(-1,m)
+                    p = rlm(λ-l,abs(μ-m),x,y,z)
+                    sum += abs(ω₋(C[λ,μ],λ,μ,l,m,1)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 6: Summand 2 aus (III) - m < 0
+            for λ=l+1:C.L
+                for μ = m+1:min(-1,m-(l-λ))
+                    p = rlm(λ-l,μ-m,x,y,z)
+                    sum += abs(ω₋(C[λ,μ],λ,μ,l,m,2)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            # 7: Summand 3 aus (III) - m < 0
+            for λ=l+1:C.L
+                for μ = -m-(λ-l):-1
+                    p = rlm(λ-l,-(μ+m),x,y,z)
+                    sum += abs(ω₋(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz)))
+                end
+            end
+            c[l,m] = sqrt(4*pi/(2*l+1))*sum
+            sum = 0
+        end
+    end
+
+    if calcSolid
+        for l = 0:c.L
+            for m = -l:l
+                # turn spherical coefficients into solid coefficients
+                c[l,m] /= sqrt(4*pi/(2*l+1))
+            end
+        end
+    end
+
+    return c
 end

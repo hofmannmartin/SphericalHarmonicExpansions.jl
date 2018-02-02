@@ -15,15 +15,15 @@ include("sphericalHarmonics.jl")
 export ylm, rlm
 
 include("sphericalHarmonicsExpansion.jl")
-export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients
+export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients, solidHarmonicsExpansion
 
 include("fastfunc.jl")
 export @fastfunc
 
 include("sphericalQuadrature.jl")
-export sphericalQuadrature
+export sphericalQuadrature, errorSphericalQuadrature
 
 include("translation.jl")
-export translation, translateRlm
+export translation, translateRlm, errorTranslation
 
 end # module
