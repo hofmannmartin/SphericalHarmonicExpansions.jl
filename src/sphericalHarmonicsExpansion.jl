@@ -51,3 +51,25 @@ function sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, x::Vari
   end
   return sum
 end
+
+"""
+    solidHarmonicsExpansion(Clm::Array{Float64,1}, x::Variable, y::Variable, z::Variable)
+*Description:*  Calculation of the solid harmonics expansion in Cartesian coordinates
+                for given coefficients which define the maximum degree of the spherical harmonics\\
+*Input:*  `Clm`       - Array with coefficients (length = (l+1)², l = max. deg. of the spherical harmonics)\\
+          `x, y, z`   - Cartesian coordinates\\
+*Output:*  Solid harmonics expansion
+"""
+function solidHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, x::Variable, y::Variable, z::Variable)
+
+  sum = 0
+
+  for l in 0:Clm.L
+    for m in -l:l
+      if Clm[l,m] != 0
+        sum += Clm[l,m] * rlm(l,m,x,y,z)
+      end
+    end
+  end
+  return sum
+end
