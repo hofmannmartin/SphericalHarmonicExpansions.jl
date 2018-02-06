@@ -70,7 +70,7 @@ function rlylm(l::Int64, m::Int, x::Variable, y::Variable, z::Variable)
 		degR = l-deg # durch das Kürzen ergibt sich ein Grad von l-deg fuer r
 		push!(tout,(x^2+y^2+z^2)^Int(degR/2)*t) # r² wird durch x²+y²+z² ersetzt
 	end
-	
+
 	return polynomial(tout)
 end
 

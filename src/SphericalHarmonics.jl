@@ -11,7 +11,7 @@ if !isdir(Pkg.dir("TypedPolynomials"))
 end
 @reexport using TypedPolynomials
 
-include("sphericalHarmonics.jl")
+include("sphericalHarmonic.jl")
 export ylm, rlm
 
 include("sphericalHarmonicsExpansion.jl")
