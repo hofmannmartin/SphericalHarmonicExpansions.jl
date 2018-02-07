@@ -3,7 +3,7 @@ module SphericalHarmonics
 
 using Reexport
 
-using MultivariatePolynomials
+@reexport using MultivariatePolynomials
 
 if !isdir(Pkg.dir("TypedPolynomials"))
     println("Installing TypedPolynomials...")
