@@ -1,4 +1,5 @@
-import Base.setindex!, Base.getindex, Base.isapprox, Base.==, Base.!=
+import Base.setindex!, Base.getindex, Base.isapprox, Base.==, Base.!=,
+        Base.+, Base.-, Base.*, Base./, Base.normalize
 
 type SphericalHarmonicCoefficients
   c::Vector{T} where T<:Real
@@ -30,6 +31,16 @@ setindex!(shc::SphericalHarmonicCoefficients,value,I) = setindex!(shc.c,value,I)
 setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,l*(l+1)+m+1)
 ==(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = shca.c == shcb.c
 !=(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = shca.c != shcb.c
++(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = SphericalHarmonicCoefficients(shca.c + shcb.c)
+-(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = SphericalHarmonicCoefficients(shca.c - shcb.c)
+*(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = SphericalHarmonicCoefficients(shca.c * shcb.c)
+/(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients) = SphericalHarmonicCoefficients(shca.c / shcb.c)
++(shc::SphericalHarmonicCoefficients, value) = SphericalHarmonicCoefficients(shc.c .+ value)
+-(shc::SphericalHarmonicCoefficients, value) = SphericalHarmonicCoefficients(shc.c .- value)
+*(shc::SphericalHarmonicCoefficients, value) = SphericalHarmonicCoefficients(shc.c .* value)
+/(shc::SphericalHarmonicCoefficients, value) = SphericalHarmonicCoefficients(shc.c ./ value)
+normalize(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] *= 1/(R^l) for l = 0:shc.L for m = -l:l])
+
 """
     sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::Variable, y::Variable, z::Variable)
 *Description:*  Calculation of the spherical harmonics expansion in Cartesian coordinates
