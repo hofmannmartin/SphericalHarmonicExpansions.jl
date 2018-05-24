@@ -1,7 +1,7 @@
 __precompile__()
 module SphericalHarmonics
 
-using Reexport
+using Reexport, HDF5
 
 @reexport using MultivariatePolynomials
 
@@ -15,7 +15,8 @@ include("sphericalHarmonic.jl")
 export ylm, rlm
 
 include("sphericalHarmonicsExpansion.jl")
-export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients, solidHarmonicsExpansion
+export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients, solidHarmonicsExpansion,
+        solid, spherical
 
 include("fastfunc.jl")
 export @fastfunc

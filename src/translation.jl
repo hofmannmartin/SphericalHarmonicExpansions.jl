@@ -1,19 +1,15 @@
 # Translation of the coefficients c by a vector v
-function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable,calcSolid::Bool=false)
+function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable)
 
-    c = SphericalHarmonicCoefficients(zeros((C.L+1)^2))
+    c = deepcopy(C)
 
     vx = v[1]
     vy = v[2]
     vz = v[3]
 
-    if calcSolid
-        for l = 0:C.L
-            for m = -l:l
-                # turn solid coefficients into spherical coefficients
-                C[l,m] *= sqrt(4*pi/(2*l+1))
-            end
-        end
+    # turn solid coefficients into spherical coefficients
+    if C.solid
+        spherical(C)
     end
 
     # c₀₀:
@@ -175,13 +171,9 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
         end
     end
 
-    if calcSolid
-        for l = 0:c.L
-            for m = -l:l
-                # turn spherical coefficients into solid coefficients
-                c[l,m] /= sqrt(4*pi/(2*l+1))
-            end
-        end
+    # turn spherical coefficients into solid coefficients
+    if c.solid
+        solid(c)
     end
 
     return c
@@ -341,21 +333,17 @@ function translateRlm(l::Int64, m::Int64,vx,vy,vz, x::Variable, y::Variable, z::
 end
 
 # Error propagation
-function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable, calcSolid::Bool=false)
+function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable)
 
-    c = SphericalHarmonicCoefficients(zeros((C.L+1)^2))
+    c = deepcopy(C)
 
     vx = v[1]
     vy = v[2]
     vz = v[3]
 
-    if calcSolid
-        for l = 0:C.L
-            for m = -l:l
-                # turn solid coefficients into spherical coefficients
-                C[l,m] *= sqrt(4*pi/(2*l+1))
-            end
-        end
+    # turn solid coefficients into spherical coefficients
+    if C.solid
+        spherical(C)
     end
 
     # c₀₀:
@@ -517,13 +505,9 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Var
         end
     end
 
-    if calcSolid
-        for l = 0:c.L
-            for m = -l:l
-                # turn spherical coefficients into solid coefficients
-                c[l,m] /= sqrt(4*pi/(2*l+1))
-            end
-        end
+    # turn spherical coefficients into solid coefficients
+    if c.solid
+        solid(c)
     end
 
     return c
