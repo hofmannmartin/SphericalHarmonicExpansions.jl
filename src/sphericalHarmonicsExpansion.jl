@@ -61,7 +61,7 @@ function SphericalHarmonicCoefficients(path::String)
       R = read(file, "/normalization")
       solid = (read(file, "/solid") .== 1)
 
-  coeffs = Array{Array{Float64}}(size(coeffsArray)[1:end-1])
+  coeffs = Array{Vector{Float64}}(size(coeffsArray)[1:end-1])
   coeffsArray = reshape(coeffsArray,(Int(length(coeffsArray)/size(coeffsArray)[end]),size(coeffsArray)[end]))
   for n=1:size(coeffsArray,1)
       coeffs[n] = coeffsArray[n,:]
