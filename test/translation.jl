@@ -3,9 +3,6 @@
 ε = 32*eps(Float64)
 @polyvar x y z;
 
-#v = [2,-3,4]; # Verschiebung
-#pkt = [1,2,-1]; # Testpunkt
-
 Wert = zeros(25,2)
 v = randn(3) # Verschiebung
 pkt = randn(3) # Testpunkt
@@ -22,10 +19,6 @@ for l=0:4
 
         Wert[l*(l+1)+m+1,1] = polyRlm(vp[1],vp[2],vp[3]);
         Wert[l*(l+1)+m+1,2] = polyTranslateRlm(pkt[1],pkt[2],pkt[3]);
-
-        # if !isapprox(Wert[l*(l+1)+m+1,1],Wert[l*(l+1)+m+1,2],atol = ε)
-        #     println(l,",",m,": q = ",Wert[l*(l+1)+m+1,1],", p = ",Wert[l*(l+1)+m+1,2]);
-        # end
     end
 end
 
