@@ -4,16 +4,24 @@
 
   @test_throws DomainError SphericalHarmonicCoefficients(-2)
   @test_throws DomainError SphericalHarmonicCoefficients([1,2,3,4,5])
+  @test_throws DomainError SphericalHarmonicCoefficients(-2,1.0,true)
+  @test_throws DomainError SphericalHarmonicCoefficients([1,2,3,4,5],1.0,true)
+  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0],BitArray(1, 0))
+  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0, 1.0],BitArray(1))
 
   c1 = SphericalHarmonicCoefficients(2)
   c2 = SphericalHarmonicCoefficients([1,2,3,4])
   c3 = SphericalHarmonicCoefficients([1+ε,2,3,4])
   c4 = SphericalHarmonicCoefficients([3,2,3,4])
+  c5 = SphericalHarmonicCoefficients(2,1.0,true)
+  c6 = SphericalHarmonicCoefficients([1,2,3,4],2.0,false)
 
   @test c2==c2
   @test c2!=c3
   @test isapprox(c2,c3)
   @test !isapprox(c2,c4)
+  @test !isapprox(c1,c5)
+  @test !isapprox(c2,c6)
 
   @test length(c1.c) == 9
   @test c2.L == 1
@@ -119,6 +127,11 @@ end
   C5 = SphericalHarmonicCoefficients(zeros(9),2.0,true)
   @test isapprox(2*C1,C1+C1,atol=ε)
   @test isapprox(C2-C2,C5,atol=ε)
+
+  @test_throws DomainError Csolid+Cspher
+  @test_throws DomainError Csolid-Cspher
+  @test_throws DomainError C4+C5
+  @test_throws DomainError C4-C5
 
   # Test: Save and read coefficients to/from an HDF5 file
   write("Test1.h5",[C2])

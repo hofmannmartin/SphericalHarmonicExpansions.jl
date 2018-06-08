@@ -9,7 +9,7 @@ type SphericalHarmonicCoefficients
 
   function SphericalHarmonicCoefficients(c::Vector{T} where T<:Real)
     if (!isinteger(sqrt(length(c))) || length==0)
-       println("input vector needs o be of size (L+1)², where L ∈ ℕ₀.")
+       println("Input vector needs to be of size (L+1)², where L ∈ ℕ₀.")
        throw(DomainError())
     end
 
@@ -19,7 +19,7 @@ type SphericalHarmonicCoefficients
 
   function SphericalHarmonicCoefficients(L::Int)
     if L<0
-      println("input vector needs o be of size (L+1)², where L ∈ ℕ₀.")
+      println("Input vector needs to be of size (L+1)², where L ∈ ℕ₀.")
       throw(DomainError())
     end
     return new(zeros((L+1)^2),UInt(L),1.0,false)
@@ -27,7 +27,7 @@ type SphericalHarmonicCoefficients
 
   function SphericalHarmonicCoefficients(L::Int,R::Float64,solid::Bool)
     if L<0
-      println("input vector needs o be of size (L+1)², where L ∈ ℕ₀.")
+      println("Input vector needs to be of size (L+1)², where L ∈ ℕ₀.")
       throw(DomainError())
     end
     return new(zeros((L+1)^2),UInt(L),R,solid)
@@ -35,7 +35,7 @@ type SphericalHarmonicCoefficients
 
   function SphericalHarmonicCoefficients(c::Vector{T} where T<:Real,R::Float64,solid::Bool)
     if (!isinteger(sqrt(length(c))) || length==0)
-       println("input vector needs o be of size (L+1)², where L ∈ ℕ₀.")
+       println("Input vector needs to be of size (L+1)², where L ∈ ℕ₀.")
        throw(DomainError())
     end
 
@@ -118,7 +118,8 @@ normalize(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoef
 
 function +(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients)
     if shca.R != shcb.R
-        println("Warning: Coefficients do not have the same normalization factor.")
+        println("Coefficients do not have the same normalization factor.")
+        throw(DomainError())
     end
     if shca.solid != shcb.solid
         println("Coefficients do not have the same type.")
@@ -128,7 +129,8 @@ function +(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficie
 end
 function -(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients)
     if shca.R != shcb.R
-        println("Warning: Coefficients do not have the same normalization factor.")
+        println("Coefficients do not have the same normalization factor.")
+        throw(DomainError())
     end
     if shca.solid != shcb.solid
         println("Coefficients do not have the same type.")
