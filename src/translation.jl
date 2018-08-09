@@ -173,6 +173,7 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
 
     # turn spherical coefficients into solid coefficients
     if c.solid
+        c.solid = false
         solid(c)
     end
 
@@ -507,6 +508,7 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Var
 
     # turn spherical coefficients into solid coefficients
     if c.solid
+        c.solid = false
         solid(c)
     end
 

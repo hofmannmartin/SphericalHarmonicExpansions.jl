@@ -114,7 +114,7 @@ setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,
 +(value, shc::SphericalHarmonicCoefficients) = +(shc::SphericalHarmonicCoefficients, value)
 -(value, shc::SphericalHarmonicCoefficients) = SphericalHarmonicCoefficients(value .- shc.c,shc.R,shc.solid)
 *(value, shc::SphericalHarmonicCoefficients) = *(shc::SphericalHarmonicCoefficients, value)
-normalize(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] *= 1/(R^l) for l = 0:shc.L for m = -l:l],R*shc.R,shc.solid)
+normalize(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] *= 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R/R,shc.solid)
 
 function +(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients)
     if shca.R != shcb.R
@@ -145,7 +145,7 @@ function solid(shc::SphericalHarmonicCoefficients)
     if !(shc.solid)
         for l = 0:shc.L
             for m = -l:l
-                shc[l,m] *= sqrt(4*pi/(2*l+1))
+                shc[l,m] *= sqrt((2*l+1)/(4*pi))
             end
         end
         shc.solid = true
@@ -157,7 +157,7 @@ function spherical(shc::SphericalHarmonicCoefficients)
     if shc.solid
         for l = 0:shc.L
             for m = -l:l
-                shc[l,m] *= 1/sqrt(4*pi/(2*l+1))
+                shc[l,m] *= sqrt(4*pi/(2*l+1))
             end
         end
         shc.solid = false
