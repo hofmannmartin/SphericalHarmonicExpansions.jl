@@ -8,6 +8,8 @@
   @test_throws DomainError SphericalHarmonicCoefficients([1,2,3,4,5],1.0,true)
   @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0],BitArray(1, 0))
   @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0, 1.0],BitArray(1))
+  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3]],[1.0, 1.0],BitArray(1, 0))
+  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2]],1.0,true)
 
   c1 = SphericalHarmonicCoefficients(2)
   c2 = SphericalHarmonicCoefficients([1,2,3,4])
@@ -15,6 +17,7 @@
   c4 = SphericalHarmonicCoefficients([3,2,3,4])
   c5 = SphericalHarmonicCoefficients(2,1.0,true)
   c6 = SphericalHarmonicCoefficients([1,2,3,4],2.0,false)
+  c7 = SphericalHarmonicCoefficients([[2],[1,2,3,4]],1.0,false)
 
   @test c2==c2
   @test c2!=c3
@@ -22,9 +25,11 @@
   @test !isapprox(c2,c4)
   @test !isapprox(c1,c5)
   @test !isapprox(c2,c6)
+  @test isapprox(c2,c7[2])
 
   @test length(c1.c) == 9
   @test c2.L == 1
+  @test c7[1].L != c7[2].L
 
   @test c2[1] == 1
   @test c2[2] == 2
@@ -84,9 +89,9 @@ end
 
   # Test: solid ↔ spherical
   csolid = zeros(25)
-  csolid[1:4] = [1,1,1,1]
+  csolid[1:4] = [sqrt(1/(4pi)),sqrt(3/(4pi)),sqrt(3/(4pi)),sqrt(3/(4pi))]
   cspher = zeros(25)
-  cspher[1:4] = [sqrt(1/(4pi)),sqrt(3/(4pi)),sqrt(3/(4pi)),sqrt(3/(4pi))]
+  cspher[1:4] = [1,1,1,1]
 
   Csolid = SphericalHarmonicCoefficients(csolid,0.042,true)
   Cspher = SphericalHarmonicCoefficients(cspher,0.042,false)
@@ -99,11 +104,11 @@ end
   # Test: Normalization
   c1 = ones(9)
   C1 = SphericalHarmonicCoefficients(c1,1.0,true)
-  c2 = [1,1/2,1/2,1/2,1/4,1/4,1/4,1/4,1/4]
+  c2 = [1,2,2,2,4,4,4,4,4]
   C2 = SphericalHarmonicCoefficients(c2,2.0,true)
 
-  @test isapprox(normalize(deepcopy(C1),2.0),C2,atol=ε)
-  @test isapprox(normalize(deepcopy(C2),1/C2.R),C1,atol=ε)
+  @test isapprox(normalize(deepcopy(C1),1/2.0),C2,atol=ε)
+  @test isapprox(normalize(deepcopy(C2),C2.R),C1,atol=ε)
 
   # Test: generate an array of SphericalHarmonicCoefficients
   c3 = reshape([ones(9) for i=1:6],2,3)

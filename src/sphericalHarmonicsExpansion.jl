@@ -48,9 +48,27 @@ type SphericalHarmonicCoefficients
        println("Arrays do not have the same size.")
        throw(DomainError())
     end
+    for co in c
+        if (!isinteger(sqrt(length(co))) || length==0)
+           println("Input vectors need to be of size (L+1)², where L ∈ ℕ₀.")
+           throw(DomainError())
+        end
+    end
 
-    L = convert(Int,sqrt(length(c[1])))-1
-    return reshape([new(c[n],L,R[n],solid[n]) for n in eachindex(c)],size(c)...)
+    L = [convert(Int,sqrt(length(co)))-1 for co in c]
+    return reshape([new(c[n],L[n],R[n],solid[n]) for n in eachindex(c)],size(c)...)
+  end
+
+  function SphericalHarmonicCoefficients(c::Array{Vector{T}} where T<:Real,R::Float64,solid::Bool)
+      for co in c
+          if (!isinteger(sqrt(length(co))) || length==0)
+             println("Input vectors need to be of size (L+1)², where L ∈ ℕ₀.")
+             throw(DomainError())
+          end
+      end
+
+    L = [convert(Int,sqrt(length(co)))-1 for co in c]
+    return reshape([new(c[n],L[n],R,solid) for n in eachindex(c)],size(c)...)
   end
 end
 
