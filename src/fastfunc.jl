@@ -7,11 +7,15 @@
 
     # Examples
     ```
-    julia> using MultivariatePolynomials
+    julia> using SphericalHarmonics
 
-    julia> p = 15.0*x*y^2+7.5*x*z^13;
+    julia> @polyvar x y z
+    (x, y, z)
 
-    julia> @fastfunc "foo" p;
+    julia> p = 15.0*x*y^2+7.5*x*z^13
+    7.5xz¹³ + 15.0xy²
+
+    julia> foo = @fastfunc p;
 
     julia> foo(1.0,2.0,3.0)
     1.19574825e7
