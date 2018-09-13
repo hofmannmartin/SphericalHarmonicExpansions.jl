@@ -1,14 +1,7 @@
-__precompile__()
 module SphericalHarmonics
 
-using Reexport, HDF5
-
+using LinearAlgebra, Reexport, HDF5
 @reexport using MultivariatePolynomials
-
-if !isdir(Pkg.dir("TypedPolynomials"))
-    println("Installing TypedPolynomials...")
-    Pkg.clone("https://github.com/rdeits/TypedPolynomials.jl.git")
-end
 @reexport using TypedPolynomials
 
 include("sphericalHarmonic.jl")

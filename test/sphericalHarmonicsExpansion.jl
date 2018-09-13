@@ -6,9 +6,9 @@
   @test_throws DomainError SphericalHarmonicCoefficients([1,2,3,4,5])
   @test_throws DomainError SphericalHarmonicCoefficients(-2,1.0,true)
   @test_throws DomainError SphericalHarmonicCoefficients([1,2,3,4,5],1.0,true)
-  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0],BitArray(1, 0))
-  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0, 1.0],BitArray(1))
-  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3]],[1.0, 1.0],BitArray(1, 0))
+  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0],BitArray(undef,(1, 0)))
+  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3,4]],[1.0, 1.0],BitArray(undef,(1,)))
+  @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2,3]],[1.0, 1.0],BitArray(undef,(1, 0)))
   @test_throws DomainError SphericalHarmonicCoefficients([[1,2,3,4],[1,2]],1.0,true)
 
   c1 = SphericalHarmonicCoefficients(2)
@@ -121,7 +121,7 @@ end
   end
 
   # Test: Operations
-  c4 = 2.*ones(9)
+  c4 = 2*ones(9)
   C4 = SphericalHarmonicCoefficients(c4,1.0,true)
   @test isapprox(C1*2,C4,atol=ε)
   @test isapprox(C4/2,C1,atol=ε)

@@ -1,5 +1,5 @@
 @testset "spherical harmonics" begin
-  ɛ = eps(Float64)
+  ɛ = 4*eps(Float64)
   @polyvar x y z
 
   #@test_throws(ErrorException(BoundsError), ylm(0,1,x,y,z))

@@ -22,17 +22,17 @@ macro fastfunc(polynomial)
 		local polystr = string($(esc(polynomial)))
 		local vars = string(tuple(variables($(esc(polynomial)))...))
 		# insert "*" in between numbers and variables
-		local regex = Regex("(\\d)" * replace(vars,", ","|"))
-		polystr = replace(polystr,regex,s"\1*\2")
+		local regex = Regex("(\\d)" * replace(vars,", " => "|"))
+		polystr = replace(polystr,regex => s"\1*\2")
 		# insert "*" in between variables "xy" -> "x*y"
-		local regex_xy = Regex(replace(vars,", ","|")*replace(vars,", ","|"))
+		local regex_xy = Regex(replace(vars,", " => "|")*replace(vars,", " => "|"))
 		for i=1:length(variables($(esc(polynomial))))-1
-			polystr = replace(polystr,regex_xy,s"\1*\2")
+			polystr = replace(polystr,regex_xy => s"\1*\2")
 		end
 		# replace "+ -" with "- "
-		polystr = replace(polystr,r"([+])(\s)([-])",s"\3 ")
+		polystr = replace(polystr,r"([+])(\s)([-])" => s"\3 ")
 		# create expression for function definition
 
-		eval(parse(vars*" -> @fastmath "*polystr))
+		eval(Meta.parse(vars*" -> @fastmath "*polystr))
 	end
 end

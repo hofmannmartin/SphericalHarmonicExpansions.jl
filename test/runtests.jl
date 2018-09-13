@@ -1,5 +1,4 @@
-using SphericalHarmonics, MultivariatePolynomials
-using Base.Test
+using LinearAlgebra, SphericalHarmonics, MultivariatePolynomials, Test
 
 include("sphericalHarmonics.jl")
 include("sphericalHarmonicsExpansion.jl")

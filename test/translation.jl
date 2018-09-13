@@ -1,6 +1,6 @@
 @testset "Translation of Rlm" begin
 
-ε = 32*eps(Float64)
+ε = 1000*eps(Float64)
 @polyvar x y z;
 
 Wert = zeros(25,2)

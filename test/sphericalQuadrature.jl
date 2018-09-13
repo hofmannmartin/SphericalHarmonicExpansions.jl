@@ -1,5 +1,5 @@
 @testset "sphericalQuadrature" begin
-  ɛ = 32*eps(Float64);
+  ɛ = 100*eps(Float64);
   @polyvar x y z;
 
   C₂ = SphericalHarmonicCoefficients(randn(9)); # L = 2
@@ -66,11 +66,11 @@
         .2862487234260350E+00 .9571203270924580E+00 .4452356458542100E-01
           ],36,3)
 
-  values₂ = Array{Float64,1}(size(coordinates₄,1));
+  values₂ = Array{Float64,1}(undef, size(coordinates₄,1));
   for i=1:size(coordinates₄,1)
       values₂[i] = p_func₂(coordinates₄[i,1],coordinates₄[i,2],coordinates₄[i,3]);
   end
-  values₄ = Array{Float64,1}(size(coordinates₈,1));
+  values₄ = Array{Float64,1}(undef, size(coordinates₈,1));
   for i=1:size(coordinates₈,1)
       values₄[i] = p_func₄(coordinates₈[i,1],coordinates₈[i,2],coordinates₈[i,3]);
   end
