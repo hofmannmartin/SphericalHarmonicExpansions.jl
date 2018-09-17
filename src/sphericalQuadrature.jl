@@ -1,5 +1,5 @@
 
-function discreteIntegration(values::Array{Float64,1}, coordinates::Array{Float64,2}, l::Int, m::Int)
+function discreteIntegration(values::Array{Float64,1}, coordinates::AbstractArray{Float64,2}, l::Int, m::Int)
 
   @polyvar x y z
 
@@ -13,14 +13,14 @@ function discreteIntegration(values::Array{Float64,1}, coordinates::Array{Float6
 end
 
 
-function sphericalQuadrature(values::Array{Float64,1}, coordinates::Array{Float64,2}, L)
+function sphericalQuadrature(values::Array{Float64,1}, coordinates::AbstractArray{Float64,2}, L)
 
   C = [discreteIntegration(values,coordinates,l,m) for l=0:L for m=-l:l]
   return SphericalHarmonicCoefficients(C)
 end
 
 # Error propagation
-function errorDiscreteIntegration(values::Array{Float64,1}, coordinates::Array{Float64,2}, l::Int, m::Int)
+function errorDiscreteIntegration(values::Array{Float64,1}, coordinates::AbstractArray{Float64,2}, l::Int, m::Int)
 
   @polyvar x y z
 
@@ -34,7 +34,7 @@ function errorDiscreteIntegration(values::Array{Float64,1}, coordinates::Array{F
 end
 
 
-function errorSphericalQuadrature(values::Array{Float64,1}, coordinates::Array{Float64,2}, L)
+function errorSphericalQuadrature(values::Array{Float64,1}, coordinates::AbstractArray{Float64,2}, L)
 
   C = [errorDiscreteIntegration(values,coordinates,l,m) for l=0:L for m=-l:l]
   return SphericalHarmonicCoefficients(C)
