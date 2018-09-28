@@ -2,7 +2,7 @@
 language: julia
 os:
   - linux
-#  - osx
+  - osx
 julia:
   - 0.7
   - 1.0
@@ -16,14 +16,7 @@ branches:
 matrix:
   allow_failures:
   - julia: nightly
-
-## uncomment and modify the following lines to manually install system packages
-#addons:
-#  apt: # apt-get for linux
-#    packages:
-#    - gfortran
-#before_script: # homebrew for mac
-#  - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; fi
+  - os: osx
 
 ## uncomment the following lines to override the default test script
 #script:
