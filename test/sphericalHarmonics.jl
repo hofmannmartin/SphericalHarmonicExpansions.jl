@@ -3,7 +3,7 @@
   @polyvar x y z
 
   #@test_throws(ErrorException(BoundsError), ylm(0,1,x,y,z))
-  @test_throws BoundsError ylm(0,1,x,y,z)
+  @test_throws DomainError ylm(0,1,x,y,z)
   # l = 0
   #Y_{0,0} = √{\frac{1}{4π}}
   @test isapprox(ylm(0,0,x,y,z),sqrt(1/(4pi))+0*x,atol=ɛ)

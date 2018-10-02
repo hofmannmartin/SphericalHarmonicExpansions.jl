@@ -1,5 +1,5 @@
 @testset "sphericalQuadrature" begin
-  ɛ = 100*eps(Float64);
+  ɛ = 1000*eps(Float64);
   @polyvar x y z;
 
   C₂ = SphericalHarmonicCoefficients(randn(9)); # L = 2

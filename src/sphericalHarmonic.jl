@@ -40,8 +40,7 @@ end
 function ylm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
 
   if abs(m) > l
-    println("-l <= m <= l expected, but m = $m and l = $l.")
-    throw(BoundsError())
+    throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
   end
 
   p = (z^2 - 1)^l
