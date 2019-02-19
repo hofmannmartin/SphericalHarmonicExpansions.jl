@@ -125,7 +125,8 @@ setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,
 +(value, shc::SphericalHarmonicCoefficients) = +(shc::SphericalHarmonicCoefficients, value)
 -(value, shc::SphericalHarmonicCoefficients) = SphericalHarmonicCoefficients(value .- shc.c,shc.R,shc.solid)
 *(value, shc::SphericalHarmonicCoefficients) = *(shc::SphericalHarmonicCoefficients, value)
-LinearAlgebra.normalize(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] *= 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R/R,shc.solid)
+LinearAlgebra.normalize(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] * 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R/R,shc.solid)
+LinearAlgebra.normalize!(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] *= 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R/R,shc.solid)
 
 function +(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients)
     if shca.R != shcb.R

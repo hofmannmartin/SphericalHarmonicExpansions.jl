@@ -107,8 +107,9 @@ end
   c2 = [1,2,2,2,4,4,4,4,4]
   C2 = SphericalHarmonicCoefficients(c2,2.0,true)
 
-  @test isapprox(normalize(deepcopy(C1),1/2.0),C2,atol=ε)
-  @test isapprox(normalize(deepcopy(C2),C2.R),C1,atol=ε)
+  @test isapprox(normalize!(C1,1/2.0),C2,atol=ε)
+  normalize!(C1,2.0)
+  @test isapprox(normalize(C2,C2.R),C1,atol=ε)
 
   # Test: generate an array of SphericalHarmonicCoefficients
   c3 = reshape([ones(9) for i=1:6],2,3)
