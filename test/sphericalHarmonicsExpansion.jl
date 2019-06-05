@@ -96,10 +96,10 @@ end
   Csolid = SphericalHarmonicCoefficients(csolid,0.042,true)
   Cspher = SphericalHarmonicCoefficients(cspher,0.042,false)
 
-  @test isapprox(spherical(deepcopy(Csolid)),Cspher,atol=ε)
-  @test isapprox(solid(deepcopy(Cspher)),Csolid,atol=ε)
-  @test isapprox(spherical(deepcopy(Cspher)),Cspher,atol=ε)
-  @test isapprox(solid(Csolid),Csolid,atol=ε)
+  @test isapprox(spherical!(deepcopy(Csolid)),Cspher,atol=ε)
+  @test isapprox(solid!(deepcopy(Cspher)),Csolid,atol=ε)
+  @test isapprox(spherical!(deepcopy(Cspher)),Cspher,atol=ε)
+  @test isapprox(solid!(Csolid),Csolid,atol=ε)
 
   # Test: Normalization
   c1 = ones(9)

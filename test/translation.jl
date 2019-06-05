@@ -64,7 +64,7 @@ end
     Csolid[3,-2] = 1/sqrt(15);
 
     # Translation
-    v = [1,-1,2]
+    v = [1.,-1.,2.]
     coeffsTransSpher = translation(Cspher,v,x,y,z)
     coeffsTransSolid = translation(Csolid,v,x,y,z)
 

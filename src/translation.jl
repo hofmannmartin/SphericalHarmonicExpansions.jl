@@ -1,7 +1,18 @@
-# Translation of the coefficients c by a vector v
-function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable)
+"""
+    translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1},x::Variable, y::Variable, z::Variable)
+*Description:* Translation of the coefficients: Shifting the expansion point by v\\
+\\
+*Input:*
+- `C`  - Coefficients
+- `v`  - shift vector (length(v) = 3)
+- `x, y, z` - Cartesian coordinates
+*Output:*
+- `cShifted` - Shifted coefficients, type: SphericalHarmonicCoefficients (cShifted.R = C.R, cShifted.solid = C.solid)
 
-    c = deepcopy(C)
+"""
+function translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1},x::Variable, y::Variable, z::Variable)
+
+    cShifted = deepcopy(C)
 
     vx = v[1]
     vy = v[2]
@@ -9,10 +20,10 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
 
     # turn solid coefficients into spherical coefficients
     if C.solid
-        spherical(C)
+        spherical!(C)
     end
 
-    # c₀₀:
+    # c[0,0]:
     sum = 0
     # Summand aus (I) - m > 0
     for λ=1:C.L
@@ -33,10 +44,10 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
             sum += ω₋(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz))
         end
     end
-    c[0,0] = sqrt(4*pi)*sum
+    cShifted[0,0] = sqrt(4*pi)*sum
     sum = 0
 
-    # cₗ₀ (l > 0):
+    # cShifted[l,0] (l > 0):
     for l=1:C.L
         # Summand aus (I) - m > 0
         for λ=l:C.L
@@ -57,11 +68,11 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
                 sum += ω₋(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz))
             end
         end
-        c[l,0] = sqrt(4*pi/(2*l+1))*sum
+        cShifted[l,0] = sqrt(4*pi/(2*l+1))*sum
         sum = 0
     end
 
-    # cₗₘ für l ≠ 0, m > 0
+    # cShifted[l,m] for l ≠ 0, m > 0
     for l=1:C.L
         for m=1:l
             # 1: Summand 1 aus (I) - m > 0
@@ -111,12 +122,12 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
                     sum += ω₋(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz))
                 end
             end
-            c[l,m] = sqrt(4*pi/(2*l+1))*sum
+            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sum
             sum = 0
         end
     end
 
-    # cₗₘ für l ≠ 0, m < 0
+    # cShifted[l,m] for l ≠ 0, m < 0
     for l=1:C.L
         for m=-l:-1
             # 1: Summand 1 aus (I) - m > 0
@@ -166,18 +177,19 @@ function translation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable
                     sum -= ω₋(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz))
                 end
             end
-            c[l,m] = sqrt(4*pi/(2*l+1))*sum
+            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sum
             sum = 0
         end
     end
 
     # turn spherical coefficients into solid coefficients
-    if c.solid
-        c.solid = false
-        solid(c)
+    if cShifted.solid
+        cShifted.solid = false
+        solid!(cShifted)
+        solid!(C)
     end
 
-    return c
+    return cShifted
 end
 
 function ω₀(c,λ,l,m,num)
@@ -227,7 +239,7 @@ function translateRlm(l::Int64, m::Int64,vx,vy,vz, x::Variable, y::Variable, z::
 
     Rlmt = 0;
 
-    # 3 Summanden fuer m≥0 und m<0 getrennt:
+    # two cases m≥0 and m<0, each with three summands:
     if m >= 0
     for λ=0:l
         for μ=max(0,λ-l+m):min(λ,m)
@@ -336,7 +348,7 @@ end
 # Error propagation
 function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable)
 
-    c = deepcopy(C)
+    cShifted = deepcopy(C)
 
     vx = v[1]
     vy = v[2]
@@ -344,10 +356,10 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Var
 
     # turn solid coefficients into spherical coefficients
     if C.solid
-        spherical(C)
+        spherical!(C)
     end
 
-    # c₀₀:
+    # cShifted[0,0]:
     sum = 0
     # Summand aus (I) - m > 0
     for λ=1:C.L
@@ -368,10 +380,10 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Var
             sum += abs(ω₋(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))
         end
     end
-    c[0,0] = sqrt(4*pi)*sum
+    cShifted[0,0] = sqrt(4*pi)*sum
     sum = 0
 
-    # cₗ₀ (l > 0):
+    # cShifted[l,0] (l > 0):
     for l=1:C.L
         # Summand aus (I) - m > 0
         for λ=l:C.L
@@ -392,11 +404,11 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Var
                 sum += abs(ω₋(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))
             end
         end
-        c[l,0] = sqrt(4*pi/(2*l+1))*sum
+        cShifted[l,0] = sqrt(4*pi/(2*l+1))*sum
         sum = 0
     end
 
-    # cₗₘ für l ≠ 0, m > 0
+    # cShifted[l,m] for l ≠ 0, m > 0
     for l=1:C.L
         for m=1:l
             # 1: Summand 1 aus (I) - m > 0
@@ -446,12 +458,12 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Var
                     sum += abs(ω₋(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz)))
                 end
             end
-            c[l,m] = sqrt(4*pi/(2*l+1))*sum
+            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sum
             sum = 0
         end
     end
 
-    # cₗₘ für l ≠ 0, m < 0
+    # cShifted[l,m] for l ≠ 0, m < 0
     for l=1:C.L
         for m=-l:-1
             # 1: Summand 1 aus (I) - m > 0
@@ -501,16 +513,17 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Var
                     sum += abs(ω₋(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz)))
                 end
             end
-            c[l,m] = sqrt(4*pi/(2*l+1))*sum
+            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sum
             sum = 0
         end
     end
 
     # turn spherical coefficients into solid coefficients
-    if c.solid
-        c.solid = false
-        solid(c)
+    if cShifted.solid
+        cShifted.solid = false
+        solid!(cShifted)
+        solid!(C)
     end
 
-    return c
+    return cShifted
 end

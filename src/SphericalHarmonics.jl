@@ -9,7 +9,7 @@ export ylm, rlm
 
 include("sphericalHarmonicsExpansion.jl")
 export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients, solidHarmonicsExpansion,
-        solid, spherical
+        solid!, spherical!
 
 include("fastfunc.jl")
 export @fastfunc

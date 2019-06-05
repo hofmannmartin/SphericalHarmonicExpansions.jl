@@ -149,7 +149,7 @@ end
 
 ## Convertions ##
 # convert spherical coefficients to solid coefficients
-function solid(shc::SphericalHarmonicCoefficients)
+function solid!(shc::SphericalHarmonicCoefficients)
     if !(shc.solid)
         for l = 0:shc.L
             for m = -l:l
@@ -161,7 +161,7 @@ function solid(shc::SphericalHarmonicCoefficients)
     return shc
 end
 # convert solid coefficients to spherical coefficients
-function spherical(shc::SphericalHarmonicCoefficients)
+function spherical!(shc::SphericalHarmonicCoefficients)
     if shc.solid
         for l = 0:shc.L
             for m = -l:l
@@ -174,7 +174,7 @@ function spherical(shc::SphericalHarmonicCoefficients)
 end
 
 """
-    sphericalHarmonicsExpansion(Clm::Array{Float64,1}, x::Variable, y::Variable, z::Variable)
+    sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, x::Variable, y::Variable, z::Variable)
 *Description:*  Calculation of the spherical or solid harmonics expansion in Cartesian coordinates
                 for given coefficients which define the maximum degree of the spherical harmonics\\
 *Input:*  `Clm`       - Array with coefficients (length = (l+1)², l = max. deg. of the spherical harmonics)\\
