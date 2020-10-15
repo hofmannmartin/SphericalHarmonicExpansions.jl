@@ -1,19 +1,26 @@
 ## Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
+notifications:
+  email: false
+julia:
+  - 1.0
+  - 1.5
+  - nightly
 os:
   - linux
   - osx
-julia:
-  - 0.7
-  - 1.0
-  - nightly
-notifications:
-  email: false
+  - windows
+arch:
+  - x64
 branches:
   only: master
-matrix:
+cache:
+  directories:
+    - ~/.julia/artifacts
+jobs:
+  fast_finish: true
   allow_failures:
-  - julia: nightly
+    - julia: nightly
 addons:
   apt:
     packages:
