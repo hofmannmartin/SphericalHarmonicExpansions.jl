@@ -11,7 +11,7 @@ end
 
 function ylmCosSinPolynomial(m::Int64, x::Variable, y::Variable)
 
-  sum = 0
+  sum = 0.0*(x+y)
   for j::Int64 in 0:floor(m/2)
     sum += ((-1)^j)*binomial(m, 2*j)*(y^(2*j))*(x^(m-2*j))
   end
@@ -20,7 +20,7 @@ end
 
 function ylmSinSinPolynomial(m::Int64, x::Variable, y::Variable)
 
-  sum = 0
+  sum = 0.0*(x+y)
   for j::Int64 in 0:floor((m-1)/2)
     sum += ((-1)^j)*binomial(m, 2*j + 1)*(y^(2*j + 1))*(x^(m-2*j-1))
   end
@@ -43,7 +43,7 @@ function ylm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
     throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
   end
 
-  p = (z^2 - 1)^l
+  p = (z^2 - 1)^l + 0.0*(x+y)
 
   for i = 1:l+abs(m)
     c = i <= l ? 1/(2*i) : 1.0
