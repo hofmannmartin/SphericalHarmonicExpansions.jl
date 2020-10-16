@@ -18,8 +18,8 @@
 	@test isapprox(f(t1,t2,t3),h(t1,t2,t3),atol=ɛ)
 	# Test inside function scope
 	function useInsideFunctionScope2(polynomial,t1,t2,t3)
-		g = fastfunc(polynomial)
+        g = fastfunc(polynomial)
 		@test isapprox(f(t1,t2,t3),g(t1,t2,t3),atol=ɛ)
 	end
-	useInsideFunctionScope2(polynomial,t1,t2,t3)
+    useInsideFunctionScope2(polynomial,t1,t2,t3)
 end

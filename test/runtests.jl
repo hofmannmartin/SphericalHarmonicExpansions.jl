@@ -1,4 +1,4 @@
-using LinearAlgebra, SphericalHarmonics, MultivariatePolynomials, Test
+using LinearAlgebra, SphericalHarmonics, Test
 
 include("sphericalHarmonics.jl")
 include("sphericalHarmonicsExpansion.jl")
