@@ -1,14 +1,14 @@
 @testset "sphericalQuadrature" begin
-  ɛ = 1000*eps(Float64);
-  @polyvar x y z;
+    ɛ = 1000*eps(Float64);
+    @polyvar x y z;
 
-  C₂ = SphericalHarmonicCoefficients(randn(9)); # L = 2
-  C₄ = SphericalHarmonicCoefficients(randn(25));# L = 4
+    C₂ = SphericalHarmonicCoefficients(randn(9)); # L = 2
+    C₄ = SphericalHarmonicCoefficients(randn(25));# L = 4
 
-  p₂ = sphericalHarmonicsExpansion(C₂,x,y,z);
-  p_func₂ = @fastfunc p₂;
-  p₄ = sphericalHarmonicsExpansion(C₄,x,y,z);
-  p_func₄ = @fastfunc p₄;
+    p₂ = sphericalHarmonicsExpansion(C₂,x,y,z);
+    p_func₂ = @fastfunc p₂;
+    p₄ = sphericalHarmonicsExpansion(C₄,x,y,z);
+    p_func₄ = @fastfunc p₄;
 
   # 4-design with 14 points:
   coordinates₄ = reshape([1.0e0 0.0e0 0.0e0
@@ -66,19 +66,18 @@
         .2862487234260350E+00 .9571203270924580E+00 .4452356458542100E-01
           ],36,3)
 
-  values₂ = Array{Float64,1}(undef, size(coordinates₄,1));
-  for i=1:size(coordinates₄,1)
-      values₂[i] = p_func₂(coordinates₄[i,1],coordinates₄[i,2],coordinates₄[i,3]);
-  end
-  values₄ = Array{Float64,1}(undef, size(coordinates₈,1));
-  for i=1:size(coordinates₈,1)
-      values₄[i] = p_func₄(coordinates₈[i,1],coordinates₈[i,2],coordinates₈[i,3]);
-  end
+    values₂ = Array{Float64,1}(undef, size(coordinates₄,1));
+    for i=1:size(coordinates₄,1)
+        values₂[i] = p_func₂(coordinates₄[i,1],coordinates₄[i,2],coordinates₄[i,3]);
+    end
+    values₄ = Array{Float64,1}(undef, size(coordinates₈,1));
+    for i=1:size(coordinates₈,1)
+        values₄[i] = p_func₄(coordinates₈[i,1],coordinates₈[i,2],coordinates₈[i,3]);
+    end
 
-  Cnew₂ = sphericalQuadrature(values₂,coordinates₄,2);
-  Cnew₄ = sphericalQuadrature(values₄,coordinates₈,4);
+    Cnew₂ = sphericalQuadrature(values₂,coordinates₄,2);
+    Cnew₄ = sphericalQuadrature(values₄,coordinates₈,4);
 
-  @test isapprox(C₂,Cnew₂,atol=ε);
-  @test isapprox(C₄,Cnew₄,atol=ε);
-
+    @test isapprox(C₂,Cnew₂,atol=ε);
+    @test isapprox(C₄,Cnew₄,atol=ε);
 end

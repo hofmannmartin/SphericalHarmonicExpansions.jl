@@ -7,29 +7,19 @@
 	polynomial = 3*z^2 + 2*y*x
 	g = @fastfunc polynomial
 	@test isapprox(f(t1,t2,t3),g(t1,t2,t3),atol=ɛ)
-
 	# Test inside function scope
-	function useInsideFunction1()
-		polynomial = 3*z^2 + 2*y*x
+	function useInsideFunctionScope1(polynomial,t1,t2,t3)
 		g = @fastfunc polynomial
-		
-		t1,t2,t3 = randn(3)
 		@test isapprox(f(t1,t2,t3),Base.invokelatest(g, t1,t2,t3),atol=ɛ)
-		return Base.invokelatest(g, t1,t2,t3)
 	end
-	useInsideFunction1()
+	useInsideFunctionScope1(polynomial,t1,t2,t3)
 
 	h = fastfunc(polynomial)
 	@test isapprox(f(t1,t2,t3),h(t1,t2,t3),atol=ɛ)
-
 	# Test inside function scope
-	function useInsideFunction2()
-		polynomial = 3*z^2 + 2*y*x
+	function useInsideFunctionScope2(polynomial,t1,t2,t3)
 		g = fastfunc(polynomial)
-		
-		t1,t2,t3 = randn(3)
-		@test isapprox(f(t1,t2,t3),Base.invokelatest(g, t1,t2,t3),atol=ɛ)
-		return Base.invokelatest(g, t1,t2,t3)
+		@test isapprox(f(t1,t2,t3),g(t1,t2,t3),atol=ɛ)
 	end
-	useInsideFunction2()
+	useInsideFunctionScope2(polynomial,t1,t2,t3)
 end
