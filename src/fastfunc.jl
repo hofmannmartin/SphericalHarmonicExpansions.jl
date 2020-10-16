@@ -35,8 +35,15 @@ macro fastfunc(polynomial)
 		end
 		# replace "+ -" with "- "
 		polystr = replace(polystr,r"([+])(\s)([-])" => s"\3 ")
-		# create expression for function definition
+        # create expression for function definition
 
 		eval(Meta.parse(vars*" -> @fastmath "*polystr))
 	end
+end
+
+function fastfunc(polynomial)
+    expr = Meta.parse(string(polynomial))
+    # expr = Base.FastMath.make_fastmath(expr) # does not work in cunjunction with fastmath
+    args = map(x-> Symbol(string(x)),variables(polynomial))
+    return mk_function(args,[],expr)
 end

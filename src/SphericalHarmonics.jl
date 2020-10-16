@@ -1,6 +1,6 @@
 module SphericalHarmonics
 
-using LinearAlgebra, Reexport, HDF5
+using LinearAlgebra, Reexport, HDF5, GeneralizedGenerated
 @reexport using MultivariatePolynomials
 @reexport using TypedPolynomials
 
@@ -12,7 +12,7 @@ export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients, solidHarmonic
         solid!, spherical!
 
 include("fastfunc.jl")
-export @fastfunc
+export @fastfunc, fastfunc
 
 include("sphericalQuadrature.jl")
 export sphericalQuadrature, errorSphericalQuadrature

@@ -4,6 +4,7 @@ authors = ["Martin Hofmann <m.hofmann@uke.de>"]
 version = "0.0.0"
 
 [deps]
+GeneralizedGenerated = "6b9d7cbe-bcb9-11e9-073f-15a7a543e2eb"
 HDF5 = "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MultivariatePolynomials = "102ac46a-7ee4-5c85-9060-abc95bfdeaa3"
@@ -15,6 +16,7 @@ HDF5 = ">= 0.12"
 MultivariatePolynomials = ">= 0.3"
 TypedPolynomials = ">= 0.2.3"
 julia = ">= 1.0"
+GeneralizedGenerated = ">= 0.2"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
