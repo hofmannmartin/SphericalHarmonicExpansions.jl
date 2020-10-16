@@ -11,7 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **The environment (please complete the following information):**
- - julia version: [e.g. 1.5]
+ - julia version [e.g. 1.5]
  - OS [e.g. ubuntu,windows]
  - package version [e.g. 0.0.0]
 
