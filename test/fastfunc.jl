@@ -1,4 +1,4 @@
-@testset "macro for generating fast functions" begin
+@testset "Generating fast functions" begin
 	ε = 100*eps(Float64)
 	t1,t2,t3 = randn(3)
 
@@ -15,7 +15,7 @@
 	useInsideFunctionScope1(polynomial,t1,t2,t3)
 
 	h = fastfunc(polynomial)
-	@test isapprox(f(t1,t2,t3),h(t1,t2,t3),atol=ɛ)
+    @test isapprox(f(t1,t2,t3),h(t1,t2,t3),atol=ɛ)
 	# Test inside function scope
 	function useInsideFunctionScope2(polynomial,t1,t2,t3)
         g = fastfunc(polynomial)
