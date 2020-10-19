@@ -1,16 +1,17 @@
 """
-    translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1},x::Variable, y::Variable, z::Variable)
+    translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1})
 *Description:* Translation of the coefficients: Shifting the expansion point by v\\
 \\
 *Input:*
 - `C`  - Coefficients
 - `v`  - shift vector (length(v) = 3)
-- `x, y, z` - Cartesian coordinates
 *Output:*
 - `cShifted` - Shifted coefficients, type: SphericalHarmonicCoefficients (cShifted.R = C.R, cShifted.solid = C.solid)
 
 """
-function translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1},x::Variable, y::Variable, z::Variable)
+function translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1})
+
+    @polyvar x y z
 
     cShifted = deepcopy(C)
 
@@ -235,7 +236,9 @@ function ω₋(c,λ,μ,l,m,num)
 end
 
 
-function translateRlm(l::Int64, m::Int64,vx,vy,vz, x::Variable, y::Variable, z::Variable)
+function translateRlm(l::Int64, m::Int64,vx,vy,vz)
+
+    @polyvar x y z
 
     Rlmt = 0;
 
@@ -346,7 +349,9 @@ function translateRlm(l::Int64, m::Int64,vx,vy,vz, x::Variable, y::Variable, z::
 end
 
 # Error propagation
-function errorTranslation(C::SphericalHarmonicCoefficients,v,x::Variable, y::Variable, z::Variable)
+function errorTranslation(C::SphericalHarmonicCoefficients,v)
+
+    @polyvar x y z
 
     cShifted = deepcopy(C)
 

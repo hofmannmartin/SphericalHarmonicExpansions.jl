@@ -15,7 +15,7 @@
     for l=0:4
         for m=-l:l
             q = rlm(l,m,x,y,z);
-            p = translateRlm(l,m,v[1],v[2],v[3],x,y,z);
+            p = SphericalHarmonics.translateRlm(l,m,v[1],v[2],v[3]);
 
             polyRlm = @fastfunc q;
             polyTranslateRlm = @fastfunc p;
@@ -47,8 +47,8 @@ end
     C = SphericalHarmonicCoefficients(randn((L+1)^2))
 
     # Translation
-    coeffsTrans = translation(C,v,x,y,z)
-    coeffsBack = translation(coeffsTrans,-v,x,y,z)
+    coeffsTrans = translation(C,v)
+    coeffsBack = translation(coeffsTrans,-v)
 
     # Test
     @test isapprox(C,coeffsBack)
@@ -65,8 +65,8 @@ end
 
     # Translation
     v = [1.,-1.,2.]
-    coeffsTransSpher = translation(Cspher,v,x,y,z)
-    coeffsTransSolid = translation(Csolid,v,x,y,z)
+    coeffsTransSpher = translation(Cspher,v)
+    coeffsTransSolid = translation(Csolid,v)
 
     # Correct solution
     CtransSpher = zeros(25)

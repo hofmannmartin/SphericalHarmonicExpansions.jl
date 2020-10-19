@@ -17,8 +17,8 @@
 
     # Translation
     v = [1,-1,2]
-    coeffsTransSpher = errorTranslation(Cspher,v,x,y,z)
-    coeffsTransSolid = errorTranslation(Csolid,v,x,y,z)
+    coeffsTransSpher = errorTranslation(Cspher,v)
+    coeffsTransSolid = errorTranslation(Csolid,v)
 
     # Correct solution
     CtransSpher = zeros(25)

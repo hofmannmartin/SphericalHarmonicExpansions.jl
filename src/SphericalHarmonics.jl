@@ -18,6 +18,6 @@ include("sphericalQuadrature.jl")
 export sphericalQuadrature, errorSphericalQuadrature
 
 include("translation.jl")
-export translation, translateRlm, errorTranslation
+export translation, errorTranslation
 
 end # module
