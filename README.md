@@ -34,18 +34,21 @@ K_{l,m}P_{l,m}(\cos \vartheta) & m = 0,
 $$ --> 
 
 <div align="center"><img src="https://render.githubusercontent.com/render/math?math=Y_%7Bl%2Cm%7D(%5Cvartheta%2C%5Cvarphi)%20%3A%3D%20%0A%5Cbegin%7Bcases%7D%0A%5Csqrt%7B2%7DK_%7Bl%2Cm%7D%20%5Ccos(m%5Cvarphi)P_%7Bl%2Cm%7D(%5Ccos%5Cvartheta)%20%26%20m%20%3E%200%5C%5C%0A%5Csqrt%7B2%7DK_%7Bl%2Cm%7D%20%5Csin(-m%5Cvarphi)P_%7Bl%2C-m%7D(%5Ccos%5Cvartheta)%20%26%20m%20%3C%200%5C%5C%0AK_%7Bl%2Cm%7DP_%7Bl%2Cm%7D(%5Ccos%20%5Cvartheta)%20%26%20m%20%3D%200%2C%0A%5Cend%7Bcases%7D"></div>
+
 where <!-- $l\in\mathbb{N}_0$ --> <img src="https://render.githubusercontent.com/render/math?math=l%5Cin%5Cmathbb%7BN%7D_0"> and <!-- $m\in [-l,l]$ --> <img src="https://render.githubusercontent.com/render/math?math=m%5Cin%20%5B-l%2Cl%5D">, <!-- $\theta$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Ctheta"> and <!-- $\phi$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cphi"> are the spherical angular coordinates, 
 <!-- $$
 K_{l,m} = \sqrt{\frac{(2l+1)(l-|m|)!}{4\pi(l+|m|)!}},
 $$ --> 
 
 <div align="center"><img src="https://render.githubusercontent.com/render/math?math=K_%7Bl%2Cm%7D%20%3D%20%5Csqrt%7B%5Cfrac%7B(2l%2B1)(l-%7Cm%7C)!%7D%7B4%5Cpi(l%2B%7Cm%7C)!%7D%7D%2C"></div>
+
 is the normalization factor and
 <!-- $$
 P_{l,m}(x) = (1-x^2)^{\frac{m}{2}}\frac{d^m}{dx^m}\left(P_l(x)\right),
 $$ --> 
 
 <div align="center"><img src="https://render.githubusercontent.com/render/math?math=P_%7Bl%2Cm%7D(x)%20%3D%20(1-x%5E2)%5E%7B%5Cfrac%7Bm%7D%7B2%7D%7D%5Cfrac%7Bd%5Em%7D%7Bdx%5Em%7D%5Cleft(P_l(x)%5Cright)%2C"></div>
+
 are the associated Legendre polynomials which can be derived from the Legendre polynomials
 <!-- $$
 P_l(x) = \frac{1}{2^ll!}\frac{d^l}{dx^l}\left[(x^2-1)^l\right].
@@ -62,6 +65,7 @@ f(\mathbf r) = \sum_{l=0}^{\infty}\sum_{m=-l}^l c_{l,m} r^l Y_l^m{\left(\frac{1}
 $$ --> 
 
 <div align="center"><img src="https://render.githubusercontent.com/render/math?math=f(%5Cmathbf%20r)%20%3D%20%5Csum_%7Bl%3D0%7D%5E%7B%5Cinfty%7D%5Csum_%7Bm%3D-l%7D%5El%20c_%7Bl%2Cm%7D%20r%5El%20Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D%2C"></div>
+
 for all <!-- $\mathbf a\in\Omega$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cmathbf%20a%5Cin%5COmega">, where <!-- $\mathbf c_{l,m}\in\mathbb R^3$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cmathbf%20c_%7Bl%2Cm%7D%5Cin%5Cmathbb%20R%5E3"> denote the spherical coefficients and <!-- $r=\Vert \mathbf r \Vert_2$ --> <img src="https://render.githubusercontent.com/render/math?math=r%3D%5CVert%20%5Cmathbf%20r%20%5CVert_2">. 
 
 The term 
