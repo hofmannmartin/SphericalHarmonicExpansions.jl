@@ -5,7 +5,7 @@ using LinearAlgebra, Reexport, HDF5, GeneralizedGenerated
 @reexport using TypedPolynomials
 
 include("sphericalHarmonic.jl")
-export ylm, rlm
+export ylm, rlylm
 
 include("sphericalHarmonicsExpansion.jl")
 export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients, solidHarmonicsExpansion,
@@ -15,9 +15,8 @@ include("fastfunc.jl")
 export @fastfunc, fastfunc
 
 include("sphericalQuadrature.jl")
-export sphericalQuadrature, errorSphericalQuadrature
 
 include("translation.jl")
-export translation, errorTranslation
+export translation
 
 end # module

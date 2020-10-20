@@ -190,7 +190,7 @@ function sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, x::Vari
       if Clm[l,m] != 0
           if Clm.solid
               # solid expansion
-              sum += Clm[l,m] * rlm(l,m,x,y,z)
+              sum += Clm[l,m] * zlm(l,m,x,y,z)
           else
               # spherical expansion
               sum += Clm[l,m] * rlylm(l,m,x,y,z)

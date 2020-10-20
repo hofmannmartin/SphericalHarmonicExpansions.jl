@@ -52,25 +52,25 @@ end
 	ε = 32*eps(Float64)
 	@polyvar x y z
 	
-	@test isapprox(SphericalHarmonics.rlylm(0,0,x,y,z),sqrt(1/(4pi))+0*x,atol=ɛ)
+	@test isapprox(rlylm(0,0,x,y,z),sqrt(1/(4pi))+0*x,atol=ɛ)
 	
-	@test isapprox(SphericalHarmonics.rlylm(1,-1,x,y,z),0+sqrt(3/(4pi))*y,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(1,0,x,y,z),0+sqrt(3/(4pi))*z,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(1,1,x,y,z),0+sqrt(3/(4pi))*x,atol=ɛ)
+	@test isapprox(rlylm(1,-1,x,y,z),0+sqrt(3/(4pi))*y,atol=ɛ)
+	@test isapprox(rlylm(1,0,x,y,z),0+sqrt(3/(4pi))*z,atol=ɛ)
+	@test isapprox(rlylm(1,1,x,y,z),0+sqrt(3/(4pi))*x,atol=ɛ)
 	
-	@test isapprox(SphericalHarmonics.rlylm(2,-2,x,y,z),0+sqrt(15/(4pi))*x*y,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(2,-1,x,y,z),0+sqrt(15/(4pi))*y*z,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(2,0,x,y,z),sqrt(5/(16pi))*(2*z^2 - x^2 - y^2),atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(2,1,x,y,z),0+sqrt(15/(4pi))*z*x,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(2,2,x,y,z),sqrt(15/(16pi))*(x^2-y^2),atol=ɛ)
+	@test isapprox(rlylm(2,-2,x,y,z),0+sqrt(15/(4pi))*x*y,atol=ɛ)
+	@test isapprox(rlylm(2,-1,x,y,z),0+sqrt(15/(4pi))*y*z,atol=ɛ)
+	@test isapprox(rlylm(2,0,x,y,z),sqrt(5/(16pi))*(2*z^2 - x^2 - y^2),atol=ɛ)
+	@test isapprox(rlylm(2,1,x,y,z),0+sqrt(15/(4pi))*z*x,atol=ɛ)
+	@test isapprox(rlylm(2,2,x,y,z),sqrt(15/(16pi))*(x^2-y^2),atol=ɛ)
 
-	@test isapprox(SphericalHarmonics.rlylm(3,-3,x,y,z),sqrt(35/(32pi))*(3*x^2-y^2)*y,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(3,-2,x,y,z),0+sqrt(105/(4pi))*x*y*z,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(3,-1,x,y,z),sqrt(21/(32pi))*y*(4*z^2-x^2-y^2),atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(3,0,x,y,z),sqrt(7/(16pi))*(5*z^3-3*z*(x^2+y^2+z^2)),atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(3,1,x,y,z),sqrt(21/(32pi))*x*(4*z^2-x^2-y^2),atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(3,2,x,y,z),sqrt(105/(16pi))*(x^2-y^2)*z,atol=ɛ)
-	@test isapprox(SphericalHarmonics.rlylm(3,3,x,y,z),sqrt(35/(32pi))*(x^2-3*y^2)*x,atol=ɛ)
+	@test isapprox(rlylm(3,-3,x,y,z),sqrt(35/(32pi))*(3*x^2-y^2)*y,atol=ɛ)
+	@test isapprox(rlylm(3,-2,x,y,z),0+sqrt(105/(4pi))*x*y*z,atol=ɛ)
+	@test isapprox(rlylm(3,-1,x,y,z),sqrt(21/(32pi))*y*(4*z^2-x^2-y^2),atol=ɛ)
+	@test isapprox(rlylm(3,0,x,y,z),sqrt(7/(16pi))*(5*z^3-3*z*(x^2+y^2+z^2)),atol=ɛ)
+	@test isapprox(rlylm(3,1,x,y,z),sqrt(21/(32pi))*x*(4*z^2-x^2-y^2),atol=ɛ)
+	@test isapprox(rlylm(3,2,x,y,z),sqrt(105/(16pi))*(x^2-y^2)*z,atol=ɛ)
+	@test isapprox(rlylm(3,3,x,y,z),sqrt(35/(32pi))*(x^2-3*y^2)*x,atol=ɛ)
 
 end
 
@@ -81,26 +81,26 @@ end
 	# test for l = 0,1,2,3
 
 	# l = 0
-	@test isapprox(rlm(0,0,x,y,z),1+0*x,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(0,0,x,y,z),1+0*x,atol=ε)
 
 	# l = 1
-	@test isapprox(rlm(1,-1,x,y,z),y+0,atol=ε)
-	@test isapprox(rlm(1,0,x,y,z),z+0,atol=ε)
-	@test isapprox(rlm(1,1,x,y,z),x+0,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(1,-1,x,y,z),y+0,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(1,0,x,y,z),z+0,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(1,1,x,y,z),x+0,atol=ε)
 
 	# l = 2
-	@test isapprox(rlm(2,-2,x,y,z),sqrt(3)*x*y+0,atol=ε)
-	@test isapprox(rlm(2,-1,x,y,z),sqrt(3)*y*z+0,atol=ε)
-	@test isapprox(rlm(2,0,x,y,z),1/2*(2*z^2-x^2-y^2),atol=ε)
-	@test isapprox(rlm(2,1,x,y,z),sqrt(3)*x*z+0,atol=ε)
-	@test isapprox(rlm(2,2,x,y,z),sqrt(3/4)*(x^2-y^2),atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(2,-2,x,y,z),sqrt(3)*x*y+0,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(2,-1,x,y,z),sqrt(3)*y*z+0,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(2,0,x,y,z),1/2*(2*z^2-x^2-y^2),atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(2,1,x,y,z),sqrt(3)*x*z+0,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(2,2,x,y,z),sqrt(3/4)*(x^2-y^2),atol=ε)
 
 	# l = 3
-	@test isapprox(rlm(3,-3,x,y,z),sqrt(5/8)*(3*x^2*y-y^3),atol=ε)
-	@test isapprox(rlm(3,-2,x,y,z),sqrt(15)*x*y*z+0,atol=ε)
-	@test isapprox(rlm(3,-1,x,y,z),sqrt(3/8)*y*(4*z^2-x^2-y^2),atol=ε)
-	@test isapprox(rlm(3,0,x,y,z),1/2*(5*z^3-3*z*(x^2+y^2+z^2)),atol=ε)
-	@test isapprox(rlm(3,1,x,y,z),sqrt(3/8)*x*(4*z^2-x^2-y^2),atol=ε)
-	@test isapprox(rlm(3,2,x,y,z),sqrt(15/4)*(x^2-y^2)*z,atol=ε)
-	@test isapprox(rlm(3,3,x,y,z),sqrt(5/8)*(x^3-3*x*y^2),atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(3,-3,x,y,z),sqrt(5/8)*(3*x^2*y-y^3),atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(3,-2,x,y,z),sqrt(15)*x*y*z+0,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(3,-1,x,y,z),sqrt(3/8)*y*(4*z^2-x^2-y^2),atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(3,0,x,y,z),1/2*(5*z^3-3*z*(x^2+y^2+z^2)),atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(3,1,x,y,z),sqrt(3/8)*x*(4*z^2-x^2-y^2),atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(3,2,x,y,z),sqrt(15/4)*(x^2-y^2)*z,atol=ε)
+	@test isapprox(SphericalHarmonics.zlm(3,3,x,y,z),sqrt(5/8)*(x^3-3*x*y^2),atol=ε)
 end

@@ -75,8 +75,8 @@
         values₄[i] = p_func₄(coordinates₈[i,1],coordinates₈[i,2],coordinates₈[i,3]);
     end
 
-    Cnew₂ = sphericalQuadrature(values₂,coordinates₄,2);
-    Cnew₄ = sphericalQuadrature(values₄,coordinates₈,4);
+    Cnew₂ = SphericalHarmonics.sphericalQuadrature(values₂,coordinates₄,2);
+    Cnew₄ = SphericalHarmonics.sphericalQuadrature(values₄,coordinates₈,4);
 
     @test isapprox(C₂,Cnew₂,atol=ε);
     @test isapprox(C₄,Cnew₄,atol=ε);

@@ -74,7 +74,7 @@ function rlylm(l::Int64, m::Int, x::Variable, y::Variable, z::Variable)
 end
 
 # solid harmonics
-function rlm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
+function zlm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
 	rlm = rlylm(l,m,x,y,z)
 	rlm = sqrt(4*pi/(2*l+1))*rlm
 	return rlm
