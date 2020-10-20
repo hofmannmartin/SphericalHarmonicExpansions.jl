@@ -14,8 +14,8 @@
                   
     for l=0:4
         for m=-l:l
-            q = SphericalHarmonics.zlm(l,m,x,y,z);
-            p = SphericalHarmonics.translateRlm(l,m,v[1],v[2],v[3]);
+            q = SphericalHarmonicExpansions.zlm(l,m,x,y,z);
+            p = SphericalHarmonicExpansions.translateRlm(l,m,v[1],v[2],v[3]);
 
             polyRlm = @fastfunc q;
             polyTranslateRlm = @fastfunc p;

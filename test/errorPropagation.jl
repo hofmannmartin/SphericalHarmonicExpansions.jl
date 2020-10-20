@@ -18,8 +18,8 @@
     # Translation
     v = [1,-1,2]
 
-    coeffsTransSpher = SphericalHarmonics.errorTranslation(Cspher,v)
-    coeffsTransSolid = SphericalHarmonics.errorTranslation(Csolid,v)
+    coeffsTransSpher = SphericalHarmonicExpansions.errorTranslation(Cspher,v)
+    coeffsTransSolid = SphericalHarmonicExpansions.errorTranslation(Csolid,v)
 
     # Correct solution
     CtransSpher = zeros(25)
@@ -46,7 +46,7 @@
 
     # Calculating the error of the coefficients up to l=1
     δ = ones(6)
-    εquadr = SphericalHarmonics.errorSphericalQuadrature(δ,coordinates,1);
+    εquadr = SphericalHarmonicExpansions.errorSphericalQuadrature(δ,coordinates,1);
 
     # Correct solution
     εcorr = [sqrt(4*pi); sqrt(4*pi/3); sqrt(4*pi/3); sqrt(4*pi/3)]

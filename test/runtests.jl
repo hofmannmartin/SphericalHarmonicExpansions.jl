@@ -1,4 +1,4 @@
-using LinearAlgebra, SphericalHarmonics, Test
+using LinearAlgebra, SphericalHarmonicExpansions, Test
 
 include("sphericalHarmonics.jl")
 include("sphericalHarmonicsExpansion.jl")

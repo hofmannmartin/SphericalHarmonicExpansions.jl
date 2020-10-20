@@ -1,4 +1,4 @@
-# SphericalHarmonics
+# SphericalHarmonicExpansions
 
 | **Build Status** |
 |:----------------:|

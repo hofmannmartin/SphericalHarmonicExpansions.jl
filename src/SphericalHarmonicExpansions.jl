@@ -1,4 +1,4 @@
-module SphericalHarmonics
+module SphericalHarmonicExpansions
 
 using LinearAlgebra, Reexport, HDF5, GeneralizedGenerated
 @reexport using MultivariatePolynomials

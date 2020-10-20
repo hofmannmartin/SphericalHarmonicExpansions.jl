@@ -56,7 +56,7 @@
         for m in -l:l
             C = SphericalHarmonicCoefficients(2)
             C[l,m] = 1
-            @test isapprox(sphericalHarmonicsExpansion(C,x,y,z),sqrt((2*l+1)/(4*pi))*SphericalHarmonics.zlm(l,m,x,y,z),atol=ɛ)
+            @test isapprox(sphericalHarmonicsExpansion(C,x,y,z),sqrt((2*l+1)/(4*pi))*SphericalHarmonicExpansions.zlm(l,m,x,y,z),atol=ɛ)
         end
     end
     #Testing the addition
