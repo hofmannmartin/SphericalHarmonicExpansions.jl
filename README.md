@@ -86,16 +86,16 @@ $$ -->
 
 <div align="center"><img src="https://render.githubusercontent.com/render/math?math=Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D"></div>
 
-in variables `x̂`, `ŷ`, and `ẑ` on the unit sphere by
+in variables `α`, `β`, and `γ` on the unit sphere by
 
 ```julia
 using SphericalHarmonics
-@polyvar x̂ ŷ ẑ
+@polyvar α β γ
 l = 7 
 m = -2
 
-p = ylm(l,m,x̂,ŷ,ẑ)
-63.28217501963252x̂ŷẑ⁵ - 48.67859616894809x̂ŷẑ³ + 6.63799038667474x̂ŷẑ
+p = ylm(l,m,α,β,γẑ)
+63.28217501963252αβγ⁵ - 48.67859616894809αβγ³ + 6.63799038667474αβγ
 ```
 
 The polynomial representation of
@@ -147,6 +147,7 @@ Note that `SphericalHarmonicCoefficients(C)` will throw an error if `length(C)` 
 f = sphericalHarmonicsExpansion(c,x,y,z)
 2.1850968611841584xz - 1.0925484305920792yz + 11.847981254502882
 ```
+Currently, expansions up to $L=66$ are supported
 
 ### Transformation of Expansion Coefficients under Translation
 

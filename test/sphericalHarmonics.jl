@@ -1,6 +1,10 @@
 @testset "spherical harmonics" begin
 	ɛ = 4*eps(Float64)
-	@polyvar x y z
+    @polyvar x y z
+    
+    # test OverflowError for large m
+    @test_throws OverflowError SphericalHarmonicExpansions.ylmCosSinPolynomial(67, x,y)
+    @test_throws OverflowError SphericalHarmonicExpansions.ylmSinSinPolynomial(67, x,y)
 
 	#test that ylm is a polynomial of correct type
 	for l = 0:3

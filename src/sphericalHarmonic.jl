@@ -1,17 +1,18 @@
 #normalization factor
-function ylmKCoefficient(l::Int64, m::Int64)
+function ylmKCoefficient(l::Integer, m::Integer)
+    k = BigInt(4)
 
-  k::Float64 = 1
-  for i in (l-m+1):(l+m)
-    k *= i
-  end
-
-  return sqrt((2*l+1) / (4*pi*k))
+    for i in l-m+1:l+m
+        # use BigInt to avoid overflow
+        k *= i
+    end
+    
+    return sqrt(Float64((2*l+1) / k)/pi)
 end
 
 function ylmCosSinPolynomial(m::Int64, x::Variable, y::Variable)
 
-  sum = 0.0*(x+y)
+  sum = 0*(x+y)
   for j::Int64 in 0:floor(m/2)
     sum += ((-1)^j)*binomial(m, 2*j)*(y^(2*j))*(x^(m-2*j))
   end
@@ -20,7 +21,7 @@ end
 
 function ylmSinSinPolynomial(m::Int64, x::Variable, y::Variable)
 
-  sum = 0.0*(x+y)
+  sum = 0*(x+y)
   for j::Int64 in 0:floor((m-1)/2)
     sum += ((-1)^j)*binomial(m, 2*j + 1)*(y^(2*j + 1))*(x^(m-2*j-1))
   end
@@ -43,7 +44,7 @@ function ylm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
     throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
   end
 
-  p = (z^2 - 1)^l + 0.0*(x+y)
+  p = 1.0*(z^2 - 1)^l + 0.0*(x+y)
 
   for i = 1:l+abs(m)
     c = i <= l ? 1/(2*i) : 1.0
