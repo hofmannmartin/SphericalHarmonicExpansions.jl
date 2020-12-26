@@ -15,7 +15,7 @@ TypedPolynomials = "afbbf031-7a57-5f58-a1b9-b774a0fad08d"
 GeneralizedGenerated = "0.2.8"
 HDF5 = "0.12,0.13, 0.14"
 MultivariatePolynomials = "0.3"
-Reexport = "0.2"
+Reexport = "0.2, 1.0"
 TypedPolynomials = "0.2"
 julia = "1.3"
 
