@@ -2,7 +2,7 @@
 
 | **Build Status** |
 |:----------------:|
-| [![Build Status](https://travis-ci.org/hofmannmartin/SphericalHarmonicExpansions.jl.svg?branch=master)](https://travis-ci.org/hofmannmartin/SphericalHarmonicExpansions.jl) |
+| [![CI](https://github.com/hofmannmartin/SphericalHarmonicExpansions.jl/workflows/CI/badge.svg)](https://github.com/hofmannmartin/SphericalHarmonicExpansions.jl/actions?query=workflow%3ACI) |
 | [![codecov.io](http://codecov.io/gh/hofmannmartin/SphericalHarmonicExpansions.jl/coverage.svg?branch=master)](http://codecov.io/gh/hofmannmartin/SphericalHarmonicExpansions.jl?branch=master) |
 
 The purpose of this package is to provide methods to numerically handle real spherical harmonics expansions in Cartesian coordinates.
