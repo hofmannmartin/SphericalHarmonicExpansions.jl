@@ -12,8 +12,9 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 TypedPolynomials = "afbbf031-7a57-5f58-a1b9-b774a0fad08d"
 
 [compat]
+
 GeneralizedGenerated = "0.2.8, 0.3"
-HDF5 = "0.12,0.13, 0.14"
+HDF5 = "0.12, 0.13, 0.14, 0.15"
 MultivariatePolynomials = "0.3"
 Reexport = "0.2, 1.0"
 TypedPolynomials = "0.2"
