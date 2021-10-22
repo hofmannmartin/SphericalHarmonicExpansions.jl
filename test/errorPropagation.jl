@@ -49,7 +49,7 @@
     εquadr = SphericalHarmonicExpansions.errorSphericalQuadrature(δ,coordinates,1);
 
     # Correct solution
-    εcorr = [sqrt(4*pi); sqrt(4*pi/3); sqrt(4*pi/3); sqrt(4*pi/3)]
+    εcorr = [sqrt(2*pi/3); sqrt(2*pi/3); sqrt(2*pi/3); sqrt(2*pi/3)]
 
     # Test
     @test isapprox(εquadr.c,εcorr,atol=ε)
