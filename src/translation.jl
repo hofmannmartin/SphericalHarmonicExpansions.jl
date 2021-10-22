@@ -370,22 +370,22 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v)
     for λ=1:C.L
         for μ = 1:λ
             p = zlm(λ,μ,x,y,z)
-            sum += abs(ω₊(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))
+            sum += (ω₊(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))^2
         end
     end
     # Summand aus (II) - m = 0
     for λ=0:C.L
         p = zlm(λ,0,x,y,z)
-        sum += abs(ω₀(C[λ,0],λ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))
+        sum += (ω₀(C[λ,0],λ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))^2
     end
     # Summand aus (III) - m < 0
     for λ=1:C.L
         for μ = -λ:-1
             p = zlm(λ,μ,x,y,z)
-            sum += abs(ω₋(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))
+            sum += (ω₋(C[λ,μ],λ,μ,0,0,1)*p((x,y,z)=>(vx,vy,vz)))^2
         end
     end
-    cShifted[0,0] = sqrt(4*pi)*sum
+    cShifted[0,0] = sqrt(4*pi)*sqrt(sum)
     sum = 0
 
     # cShifted[l,0] (l > 0):
@@ -394,22 +394,22 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v)
         for λ=l:C.L
             for μ = 1:λ-l
                 p = zlm(λ-l,μ,x,y,z)
-                sum += abs(ω₊(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))
+                sum += (ω₊(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))^2
             end
         end
         # Summand aus (II) - m = 0
         for λ=l:C.L
             p = zlm(λ-l,0,x,y,z)
-            sum += abs(ω₀(C[λ,0],λ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))
+            sum += (ω₀(C[λ,0],λ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))^2
         end
         # Summand aus (III) - m < 0
         for λ=l:C.L
             for μ = -(λ-l):-1
                 p = zlm(λ-l,μ,x,y,z)
-                sum += abs(ω₋(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))
+                sum += (ω₋(C[λ,μ],λ,μ,l,0,1)*p((x,y,z)=>(vx,vy,vz)))^2
             end
         end
-        cShifted[l,0] = sqrt(4*pi/(2*l+1))*sum
+        cShifted[l,0] = sqrt(4*pi/(2*l+1))*sqrt(sum)
         sum = 0
     end
 
@@ -420,50 +420,50 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v)
             for λ=l:C.L
                 for μ = m:m-(l-λ)
                     p = zlm(λ-l,μ-m,x,y,z)
-                    sum += abs(ω₊(C[λ,μ],λ,μ,l,m,1)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₊(C[λ,μ],λ,μ,l,m,1)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 2: Summand 2 aus (I) - m > 0
             for λ=l+1:C.L
                 for μ = max(1,m-(λ-l)):m-1
                     p = zlm(λ-l,abs(μ-m),x,y,z)
-                    sum += abs(ω₊(C[λ,μ],λ,μ,l,m,2)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₊(C[λ,μ],λ,μ,l,m,2)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 3: Summand 3 aus (I) - m > 0
             for λ=l+1:C.L
                 for μ = 1:-m-(l-λ)
                     p = zlm(λ-l,μ+m,x,y,z)
-                    sum += abs(ω₊(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₊(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 4: Summand aus (II) - m = 0
             for λ=m+l:C.L
                 p = zlm(λ-l,m,x,y,z)
-                sum += abs((ω₀(C[λ,0],λ,l,m,2)+ω₀(C[λ,0],λ,l,-m,3))*p((x,y,z)=>(vx,vy,vz)))
+                sum += ((ω₀(C[λ,0],λ,l,m,2)+ω₀(C[λ,0],λ,l,-m,3))*p((x,y,z)=>(vx,vy,vz)))^2
             end
             # 5: Summand 1 aus (III) - m < 0
             for λ=l:C.L
                 for μ = -m-(λ-l):-m-1 #min(-1,-m)
                     p = zlm(λ-l,μ+m,x,y,z)
-                    sum += abs(ω₋(C[λ,μ],λ,μ,l,-m,1)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₋(C[λ,μ],λ,μ,l,-m,1)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 6: Summand 2 aus (III) - m < 0
             for λ=l+1:C.L
                 for μ = -m+1:min(-1,-m-(l-λ))
                     p = zlm(λ-l,-(μ+m),x,y,z)
-                    sum += abs(ω₋(C[λ,μ],λ,μ,l,-m,2)*p((x,y,z)=>(vx,vy,vz)))
+                    sum -= (ω₋(C[λ,μ],λ,μ,l,-m,2)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 7: Summand 3 aus (III) - m < 0
             for λ=l+1:C.L
                 for μ = m-(λ-l):-1
                     p = zlm(λ-l,μ-m,x,y,z)
-                    sum += abs(ω₋(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₋(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
-            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sum
+            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sqrt(sum)
             sum = 0
         end
     end
@@ -475,50 +475,50 @@ function errorTranslation(C::SphericalHarmonicCoefficients,v)
             for λ=l:C.L
                 for μ = -m+1:-m-(l-λ)
                     p = zlm(λ-l,-(μ+m),x,y,z)
-                    sum += abs(ω₊(C[λ,μ],λ,μ,l,-m,1)*p((x,y,z)=>(vx,vy,vz)))
+                    sum -= (ω₊(C[λ,μ],λ,μ,l,-m,1)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 2: Summand 2 aus (I) - m > 0
             for λ=l+1:C.L
                 for μ = max(1,-m-(λ-l)):-m-1
                     p = zlm(λ-l,-abs(μ+m),x,y,z)
-                    sum += abs(ω₊(C[λ,μ],λ,μ,l,-m,2)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₊(C[λ,μ],λ,μ,l,-m,2)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 3: Summand 3 aus (I) - m > 0
             for λ=l+1:C.L
                 for μ = 1:m-(l-λ)
                     p = zlm(λ-l,-(μ-m),x,y,z)
-                    sum += abs(ω₊(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₊(C[λ,μ],λ,μ,l,m,3)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 4: Summand aus (II) - m = 0
             for λ=l-m:C.L
                 p = zlm(λ-l,m,x,y,z)
-                sum += abs((ω₀(C[λ,0],λ,l,-m,2)+ω₀(C[λ,0],λ,l,m,3))*p((x,y,z)=>(vx,vy,vz)))
+                sum += ((ω₀(C[λ,0],λ,l,-m,2)+ω₀(C[λ,0],λ,l,m,3))*p((x,y,z)=>(vx,vy,vz)))^2
             end
             # 5: Summand 1 aus (III) - m < 0
             for λ=l:C.L
                 for μ = m-(λ-l):m#-1 #min(-1,m)
                     p = zlm(λ-l,abs(μ-m),x,y,z)
-                    sum += abs(ω₋(C[λ,μ],λ,μ,l,m,1)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₋(C[λ,μ],λ,μ,l,m,1)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 6: Summand 2 aus (III) - m < 0
             for λ=l+1:C.L
                 for μ = m+1:min(-1,m-(l-λ))
                     p = zlm(λ-l,μ-m,x,y,z)
-                    sum += abs(ω₋(C[λ,μ],λ,μ,l,m,2)*p((x,y,z)=>(vx,vy,vz)))
+                    sum += (ω₋(C[λ,μ],λ,μ,l,m,2)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
             # 7: Summand 3 aus (III) - m < 0
             for λ=l+1:C.L
                 for μ = -m-(λ-l):-1
                     p = zlm(λ-l,-(μ+m),x,y,z)
-                    sum += abs(ω₋(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz)))
+                    sum -= (ω₋(C[λ,μ],λ,μ,l,-m,3)*p((x,y,z)=>(vx,vy,vz)))^2
                 end
             end
-            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sum
+            cShifted[l,m] = sqrt(4*pi/(2*l+1))*sqrt(sum)
             sum = 0
         end
     end

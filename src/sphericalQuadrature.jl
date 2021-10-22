@@ -28,9 +28,9 @@ function errorDiscreteIntegration(values::Array{Float64,1}, coordinates::Abstrac
   p = ylm(l,m,x,y,z)
 
   for k in 1:length(values)
-    sum += values[k] * abs(p((x,y,z)=>(coordinates[k,1],coordinates[k,2],coordinates[k,3])))
+    sum += (values[k] * p((x,y,z)=>(coordinates[k,1],coordinates[k,2],coordinates[k,3])))^2
   end
-  return sum * ((4*pi)/length(values))
+  return sqrt(sum) * ((4*pi)/length(values)) * sqrt(4*pi/(2*l+1))
 end
 
 
