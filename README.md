@@ -29,13 +29,13 @@ Y_{l,m}(\vartheta,\varphi) :=
 \begin{cases}
 \sqrt{2}K_{l,m} \cos(m\varphi)P_{l,m}(\cos\vartheta) & m > 0\\
 \sqrt{2}K_{l,m} \sin(-m\varphi)P_{l,-m}(\cos\vartheta) & m < 0\\
-K_{l,m}P_{l,m}(\cos \vartheta) & m = 0,
-\end{cases}
+K_{l,m}P_{l,m}(\cos \vartheta) & m = 0
+\end{cases},
 $$ --> 
 
 <div align="center"><img src="https://render.githubusercontent.com/render/math?math=Y_%7Bl%2Cm%7D(%5Cvartheta%2C%5Cvarphi)%20%3A%3D%20%0A%5Cbegin%7Bcases%7D%0A%5Csqrt%7B2%7DK_%7Bl%2Cm%7D%20%5Ccos(m%5Cvarphi)P_%7Bl%2Cm%7D(%5Ccos%5Cvartheta)%20%26%20m%20%3E%200%5C%5C%0A%5Csqrt%7B2%7DK_%7Bl%2Cm%7D%20%5Csin(-m%5Cvarphi)P_%7Bl%2C-m%7D(%5Ccos%5Cvartheta)%20%26%20m%20%3C%200%5C%5C%0AK_%7Bl%2Cm%7DP_%7Bl%2Cm%7D(%5Ccos%20%5Cvartheta)%20%26%20m%20%3D%200%2C%0A%5Cend%7Bcases%7D"></div>
 
-where <!-- $l\in\mathbb{N}_0$ --> <img src="https://render.githubusercontent.com/render/math?math=l%5Cin%5Cmathbb%7BN%7D_0"> and <!-- $m\in [-l,l]$ --> <img src="https://render.githubusercontent.com/render/math?math=m%5Cin%20%5B-l%2Cl%5D">, <!-- $\theta$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Ctheta"> and <!-- $\phi$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cphi"> are the spherical angular coordinates, 
+where <!-- $l\in\mathbb{N}_0$ --> <img src="https://render.githubusercontent.com/render/math?math=l%5Cin%5Cmathbb%7BN%7D_0">, <!-- $m\in [-l,l]$ --> <img src="https://render.githubusercontent.com/render/math?math=m%5Cin%20%5B-l%2Cl%5D">, <!-- $\theta$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Ctheta"> and <!-- $\phi$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cphi"> are the spherical angular coordinates, 
 <!-- $$
 K_{l,m} = \sqrt{\frac{(2l+1)(l-|m|)!}{4\pi(l+|m|)!}},
 $$ --> 
@@ -75,7 +75,7 @@ $$ -->
 
 <div align="center"><img src="https://render.githubusercontent.com/render/math?math=r%5El%20Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D"></div>
 
-can be transformed from from spherical to Cartesian coordinates, where is can be expressed as a homogeneous polynomial of degree <!-- $l$ --> <img src="https://render.githubusercontent.com/render/math?math=l">.
+can be transformed from spherical to Cartesian coordinates, where it can be expressed as a homogeneous polynomial of degree <!-- $l$ --> <img src="https://render.githubusercontent.com/render/math?math=l">.
 
 ## Usage
 ### Polynomial Representation of the Spherical Harmonics
@@ -124,7 +124,7 @@ $$ -->
 
 with <!-- $L \in \mathbb N$ --> <img src="https://render.githubusercontent.com/render/math?math=L%20%5Cin%20%5Cmathbb%20N"> its multivariate polynomial representation has finite degree.
 
-Coefficents <!-- $c_{l,m}$ --> <img src="https://render.githubusercontent.com/render/math?math=c_%7Bl%2Cm%7D"> can be initialized and populated by by `c[l,m] = 42.0`.
+Coefficents <!-- $c_{l,m}$ --> <img src="https://render.githubusercontent.com/render/math?math=c_%7Bl%2Cm%7D"> can be initialized and populated by `c[l,m] = 42.0`.
 
 ```julia
 L = 2
@@ -133,7 +133,7 @@ c[0,0] = 42.0 #c₀₀
 c[2,-1] = -1.0 #c₂₋₁
 c[2,1] = 2.0 #c₂₁
 ```
-Internally the coefficients are lexicographically stored in a vector (`c[0,0]`, `c[1,-1]`, `c[1,0]`, `c[1,1]`, `c[2,-2]`, ...). So the above initialization is equivalent to
+Internally, the coefficients are lexicographically stored in a vector (`c[0,0]`, `c[1,-1]`, `c[1,0]`, `c[1,1]`, `c[2,-2]`, ...). So the above initialization is equivalent to
 ```julia
 C = [42.0,0,0,0,0,-1,0,2,0]
 c = SphericalHarmonicCoefficients(C)
@@ -147,11 +147,11 @@ Note that `SphericalHarmonicCoefficients(C)` will throw an error if `length(C)` 
 f = sphericalHarmonicsExpansion(c,x,y,z)
 2.1850968611841584xz - 1.0925484305920792yz + 11.847981254502882
 ```
-Currently, expansions up to $L=66$ are supported
+Currently, expansions up to $L=66$ are supported.
 
 ### Transformation of Expansion Coefficients under Translation
 
-If we change from a coordinate sytsem with coordinates `x`, `y`, and `z` into a translated one with new coordinates `u = x + tx`, `v = y + ty`, and `w = z + tz` we need transformed coefficients to express the expansiion in these new coordinates. To this end we can do 
+If we change from a coordinate sytsem with coordinates `x`, `y`, and `z` into a translated one with new coordinates `u = x + tx`, `v = y + ty`, and `w = z + tz` we need transformed coefficients to express the expansion in these new coordinates. To this end, we can do 
 
 ```julia
 @polyvar u v w
