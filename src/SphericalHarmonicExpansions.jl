@@ -8,8 +8,8 @@ include("sphericalHarmonic.jl")
 export ylm, rlylm
 
 include("sphericalHarmonicsExpansion.jl")
-export sphericalHarmonicsExpansion, SphericalHarmonicCoefficients, solidHarmonicsExpansion,
-        solid!, spherical!
+export SphericalHarmonicCoefficients, sphericalHarmonicsExpansion, solidHarmonicsExpansion,
+       solid!, spherical!, normalize, normalize!
 
 include("fastfunc.jl")
 export @fastfunc, fastfunc
