@@ -6,6 +6,11 @@
     @test_throws OverflowError SphericalHarmonicExpansions.ylmCosSinPolynomial(67, x,y)
     @test_throws OverflowError SphericalHarmonicExpansions.ylmSinSinPolynomial(67, x,y)
 
+	# test expasion of (x²+y²+z²)^n
+	for n = 0:10
+		@test SphericalHarmonicExpansions.trinomialExpansion(n , x, y, z) == (x^2+y^2+z^2)^n
+	end
+
 	#test that ylm is a polynomial of correct type
 	for l = 0:3
 		for m = -l:l

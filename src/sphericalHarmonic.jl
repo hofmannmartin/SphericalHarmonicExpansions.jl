@@ -1,31 +1,25 @@
 #normalization factor
-function ylmKCoefficient(l::Integer, m::Integer)
-    k = BigInt(4)
-
-    for i in l-m+1:l+m
-        # use BigInt to avoid overflow
-        k *= i
-    end
-    
-    return sqrt(Float64((2*l+1) / k)/pi)
+function ylmCoefficient(l, m)
+  kpi = 4*pi
+  for i in l-m+1:l+m
+      kpi *= i
+  end
+  out = sqrt((2*l+1)/kpi)
+  if out!=0
+    return sqrt((2*l+1)/kpi)
+  else
+    error("ylmCoefficient could not be represented in floating point precicion")
+  end    
 end
 
-function ylmCosSinPolynomial(m::Int64, x::Variable, y::Variable)
-
-  sum = 0*(x+y)
-  for j::Int64 in 0:floor(m/2)
-    sum += ((-1)^j)*binomial(m, 2*j)*(y^(2*j))*(x^(m-2*j))
-  end
-  return sum
+function ylmCosSinPolynomial(m, x, y)
+	terms = [((-1)^j)*binomial(m, 2*j)*y^(2*j)*x^(m-2*j) for j in 0:floor(Int,m/2)]
+	return Polynomial(terms)
 end
 
-function ylmSinSinPolynomial(m::Int64, x::Variable, y::Variable)
-
-  sum = 0*(x+y)
-  for j::Int64 in 0:floor((m-1)/2)
-    sum += ((-1)^j)*binomial(m, 2*j + 1)*(y^(2*j + 1))*(x^(m-2*j-1))
-  end
-  return sum
+function ylmSinSinPolynomial(m, x, y)
+	terms = [((-1)^j)*binomial(m, 2*j + 1)*y^(2*j + 1)*x^(m-2*j-1) for j in 0:floor(Int,(m-1)/2)]
+	return Polynomial(terms)
 end
 
 """
@@ -38,44 +32,50 @@ end
 
 *Output:*  Spherical harmonic polynomial
 """
-function ylm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
+function ylm(l, m, x, y, z)
+	if abs(m) > l
+		throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
+	end
 
-  if abs(m) > l
-    throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
-  end
+	terms = [Float64((-1)^k*binomial(l,k))*z^(2*(l-k)) for k=0:ceil(Int,(l-abs(m))/2)]
+	p = Polynomial(terms) + 0.0*(x+y)
+	for i = 1:l+abs(m)
+		c = i <= l ? 1/(2*i) : 1.0
+		p = c*differentiate(p, z, Val{1}())
+	end
 
-  p = 1.0*(z^2 - 1)^l + 0.0*(x+y)
+	if m > 0
+		return sqrt(2)*ylmCoefficient(l, m)*ylmCosSinPolynomial(m,x,y)*p
+	elseif m < 0
+		return sqrt(2)*ylmCoefficient(l, abs(m))*ylmSinSinPolynomial(abs(m),x,y)*p
+	else
+		return ylmCoefficient(l, 0)*p
+	end
+end
 
-  for i = 1:l+abs(m)
-    c = i <= l ? 1/(2*i) : 1.0
-    p = c*differentiate(p, z)
-  end
-
-  if m > 0
-    return sqrt(2)*ylmKCoefficient(l, m)*ylmCosSinPolynomial(m,x,y)*p
-  elseif m < 0
-    return sqrt(2)*ylmKCoefficient(l, abs(m))*ylmSinSinPolynomial(abs(m),x,y)*p
-  else
-    return ylmKCoefficient(l, 0)*p
-  end
+# expand (x²+y²+z²)^n
+function trinomialExpansion(n , x, y, z)
+	multiindices = [(i,j,n-i-j) for i in 0:n for j in 0:n-i]
+	terms = [multinomial(i,j,k)*x^(2*i)*y^(2*j)*z^(2*k) for (i,j,k) in multiindices]
+	return polynomial(terms)
 end
 
 # multiplying r^l*ylm(x,y,z)
-function rlylm(l::Int64, m::Int, x::Variable, y::Variable, z::Variable)
+function rlylm(l, m, x, y, z)
 	p = ylm(l,m,x,y,z)
-	tout = []
-	# Zerlegung des Polynoms in Terme:
+
+  pout = 0.0*(x+y+z)
 	for t in terms(p)
-		deg = degree(monomial(t)) # Gibt den gesamten Grad des Monoms an
+		deg = degree(t) # Gibt den gesamten Grad des Monoms an
 		degR = l-deg # durch das Kürzen ergibt sich ein Grad von l-deg fuer r
-		push!(tout,(x^2+y^2+z^2)^Int(degR/2)*t) # r² wird durch x²+y²+z² ersetzt
+		pout += trinomialExpansion(div(degR,2),x,y,z)*t # r² wird durch x²+y²+z² ersetzt
 	end
 
-	return polynomial(tout)
+	return pout
 end
 
 # solid harmonics
-function zlm(l::Int64, m::Int64, x::Variable, y::Variable, z::Variable)
+function zlm(l, m, x, y, z)
 	rlm = rlylm(l,m,x,y,z)
 	rlm = sqrt(4*pi/(2*l+1))*rlm
 	return rlm

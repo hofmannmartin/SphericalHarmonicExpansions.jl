@@ -1,6 +1,6 @@
 module SphericalHarmonicExpansions
 
-using LinearAlgebra, Reexport, HDF5, GeneralizedGenerated
+using LinearAlgebra, Reexport, HDF5, GeneralizedGenerated, Combinatorics
 @reexport using MultivariatePolynomials
 @reexport using TypedPolynomials
 
