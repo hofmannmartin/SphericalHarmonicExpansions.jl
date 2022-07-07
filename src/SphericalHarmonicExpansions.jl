@@ -1,7 +1,7 @@
 module SphericalHarmonicExpansions
 
 using LinearAlgebra, Reexport, HDF5, GeneralizedGenerated, Combinatorics
-@reexport using MultivariatePolynomials
+import MultivariatePolynomials: terms, degree, polynomial
 @reexport using TypedPolynomials
 
 include("sphericalHarmonic.jl")
