@@ -1,6 +1,7 @@
 @testset "Generating fast functions" begin
 	ε = 100*eps(Float64)
-	t1,t2,t3 = randn(3)
+	r = randn(3)
+	t1,t2,t3 = r
 
 	f(x1,x2,x3) = 3*x3^2 + 2*x2*x1
 	@polyvar x y z
@@ -15,11 +16,11 @@
 	useInsideFunctionScope1(polynomial,t1,t2,t3)
 
 	h = fastfunc(polynomial)
-    @test isapprox(f(t1,t2,t3),h(t1,t2,t3),atol=ɛ)
+    @test isapprox(f(t1,t2,t3),h(r),atol=ɛ)
 	# Test inside function scope
-	function useInsideFunctionScope2(polynomial,t1,t2,t3)
+	function useInsideFunctionScope2(polynomial,t1,t2,t3,r)
         g = fastfunc(polynomial)
-		@test isapprox(f(t1,t2,t3),g(t1,t2,t3),atol=ɛ)
+		@test isapprox(f(t1,t2,t3),g(r),atol=ɛ)
 	end
-    useInsideFunctionScope2(polynomial,t1,t2,t3)
+    useInsideFunctionScope2(polynomial,t1,t2,t3,r)
 end

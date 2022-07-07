@@ -63,12 +63,7 @@ end
 """
 fastfunc(polynomial::Polynomial)
 
-Generates a function for fast numerical evaluation. The number of input
-arguments of the generated function will match the number of variables in the
-input polynomial.
-
-Note that the polynomial is transformed using `@fastmath`, which calls 
-functions that may violate strict IEEE semantics.
+Generates a function for fast numerical evaluation, with a single input argument.
 
 If you only plan a few evaluations of polynomial use the standard method (see
 e.g. TypedPolynomials for details). Only for a large number of evaluations the
@@ -86,15 +81,15 @@ julia> @polyvar x y z
 julia> p = 15.0*x*y^2+7.5*x*z^13
 7.5xz¹³ + 15.0xy²
 
-julia> foo = fastfunc(p)
+julia> ps = fastfunc(p)
 
-julia> foo(1.0,2.0,3.0)
+julia> r = [1.0,2.0,3.0]
+
+julia> ps(r)
 1.19574825e7
 ```
 """
 function fastfunc(polynomial)
-    expr = Meta.parse(string(variables(polynomial))*" -> "*string(polynomial))
-    # use fastmath
-    expr = Base.FastMath.make_fastmath(expr)
-    return mk_function(expr)
+    ps = StaticPolynomials.Polynomial(polynomial, Variable[variables(polynomial)...], nothing)
+    return ps
 end
