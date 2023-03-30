@@ -23,4 +23,10 @@
 		@test isapprox(f(t1,t2,t3),g(r),atol=ɛ)
 	end
     useInsideFunctionScope2(polynomial,t1,t2,t3,r)
+
+    # Test fastfunc on SphericalHarmonicCoefficients
+    ca = rand(4)
+    coeffs = SphericalHarmonicCoefficients(ca,1.0,true)
+    fc = fastfunc(coeffs)
+    @test isapprox(fc(1,1,1),sum(ca),atol=ε)
 end

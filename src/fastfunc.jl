@@ -93,3 +93,16 @@ function fastfunc(polynomial)
     ps = StaticPolynomials.Polynomial(polynomial, Variable[variables(polynomial)...], nothing)
     return ps
 end
+
+"""
+    func = fastfunc(coeffs::SphericalHarmonicCoefficients)
+
+fastfunc applied on SphericalHarmonicCoefficients: 
+Generates a function from the spherical harmonic expansion.
+"""
+function fastfunc(coeffs::SphericalHarmonicCoefficients)
+  @polyvar x y z
+  expansion = sphericalHarmonicsExpansion(coeffs, x, y, z)
+  func = @fastfunc expansion
+  return func
+end
