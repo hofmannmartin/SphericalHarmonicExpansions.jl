@@ -67,19 +67,22 @@ end
 
 # write and read coefficients to/from an HDF5-file
 function SphericalHarmonicCoefficients(path::String)
-  file = h5open(path,"r")
-      coeffsArray = read(file, "/coeffs")
-      R = read(file, "/normalization")
-      solid = (read(file, "/solid") .== 1)
+  coeffs, R, solid = h5open(path,"r") do file
+    coeffsArray = read(file, "/coeffs")
+    R = read(file, "/normalization")
+    solid = (read(file, "/solid") .== 1)
 
-  if size(coeffsArray)[1:end-1] == ()
+    if size(coeffsArray)[1:end-1] == ()
       coeffs = Array{Vector{Float64}}(undef,1)
-  else
+    else
       coeffs = Array{Vector{Float64}}(undef,size(coeffsArray)[1:end-1])
-  end
-  coeffsArray = reshape(coeffsArray,(Int(length(coeffsArray)/size(coeffsArray)[end]),size(coeffsArray)[end]))
-  for n=1:size(coeffsArray,1)
+    end
+    coeffsArray = reshape(coeffsArray,(Int(length(coeffsArray)/size(coeffsArray)[end]),size(coeffsArray)[end]))
+    for n=1:size(coeffsArray,1)
       coeffs[n] = coeffsArray[n,:]
+    end
+
+    return coeffs, R, solid
   end
 
   return SphericalHarmonicCoefficients(coeffs, R, solid)
