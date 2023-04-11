@@ -1,7 +1,7 @@
 name = "SphericalHarmonicExpansions"
 uuid = "504afa71-bae7-47b4-8ec9-3851161806ac"
 authors = ["Martin Hofmann <m.hofmann@uke.de>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
