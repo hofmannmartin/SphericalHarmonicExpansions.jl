@@ -28,5 +28,5 @@
     ca = rand(4)
     coeffs = SphericalHarmonicCoefficients(ca,1.0,true)
     fc = fastfunc(coeffs)
-    @test isapprox(fc(1,1,1),sum(ca),atol=ε)
+    @test isapprox(fc(ones(3)),sum(ca),atol=ε)
 end

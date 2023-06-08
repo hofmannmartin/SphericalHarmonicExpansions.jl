@@ -103,6 +103,6 @@ Generates a function from the spherical harmonic expansion.
 function fastfunc(coeffs::SphericalHarmonicCoefficients)
   @polyvar x y z
   expansion = sphericalHarmonicsExpansion(coeffs, x, y, z)
-  func = @fastfunc expansion
+  func = fastfunc(expansion)
   return func
 end
