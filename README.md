@@ -1,3 +1,4 @@
+
 # SphericalHarmonicExpansions
 
 | **Build Status** |
@@ -24,67 +25,62 @@ The purpose of this package is to provide methods to numerically handle real sph
 ### Definition of the Spherical Harmonics
 
 The normalized real spherical harmonics on the unit sphere are defined by 
-<!-- $$
+```math
 Y_{l,m}(\vartheta,\varphi) := 
 \begin{cases}
 \sqrt{2}K_{l,m} \cos(m\varphi)P_{l,m}(\cos\vartheta) & m > 0\\
 \sqrt{2}K_{l,m} \sin(-m\varphi)P_{l,-m}(\cos\vartheta) & m < 0\\
 K_{l,m}P_{l,m}(\cos \vartheta) & m = 0
 \end{cases},
-$$ --> 
+``` 
 
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=Y_%7Bl%2Cm%7D(%5Cvartheta%2C%5Cvarphi)%20%3A%3D%20%0A%5Cbegin%7Bcases%7D%0A%5Csqrt%7B2%7DK_%7Bl%2Cm%7D%20%5Ccos(m%5Cvarphi)P_%7Bl%2Cm%7D(%5Ccos%5Cvartheta)%20%26%20m%20%3E%200%5C%5C%0A%5Csqrt%7B2%7DK_%7Bl%2Cm%7D%20%5Csin(-m%5Cvarphi)P_%7Bl%2C-m%7D(%5Ccos%5Cvartheta)%20%26%20m%20%3C%200%5C%5C%0AK_%7Bl%2Cm%7DP_%7Bl%2Cm%7D(%5Ccos%20%5Cvartheta)%20%26%20m%20%3D%200%2C%0A%5Cend%7Bcases%7D"></div>
 
-where <!-- $l\in\mathbb{N}_0$ --> <img src="https://render.githubusercontent.com/render/math?math=l%5Cin%5Cmathbb%7BN%7D_0">, <!-- $m\in [-l,l]$ --> <img src="https://render.githubusercontent.com/render/math?math=m%5Cin%20%5B-l%2Cl%5D">, <!-- $\theta$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Ctheta"> and <!-- $\phi$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cphi"> are the spherical angular coordinates, 
-<!-- $$
+
+where $`l\in\mathbb{N}_0`$, $`m\in [-l,l]`$, $`\theta`$ and $`\phi`$ are the spherical angular coordinates, 
+```math
 K_{l,m} = \sqrt{\frac{(2l+1)(l-|m|)!}{4\pi(l+|m|)!}},
-$$ --> 
-
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=K_%7Bl%2Cm%7D%20%3D%20%5Csqrt%7B%5Cfrac%7B(2l%2B1)(l-%7Cm%7C)!%7D%7B4%5Cpi(l%2B%7Cm%7C)!%7D%7D%2C"></div>
-
+```
 is the normalization factor and
-<!-- $$
+```math
 P_{l,m}(x) = (1-x^2)^{\frac{m}{2}}\frac{d^m}{dx^m}\left(P_l(x)\right),
-$$ --> 
-
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=P_%7Bl%2Cm%7D(x)%20%3D%20(1-x%5E2)%5E%7B%5Cfrac%7Bm%7D%7B2%7D%7D%5Cfrac%7Bd%5Em%7D%7Bdx%5Em%7D%5Cleft(P_l(x)%5Cright)%2C"></div>
+```
 
 are the associated Legendre polynomials which can be derived from the Legendre polynomials
-<!-- $$
+```math
 P_l(x) = \frac{1}{2^ll!}\frac{d^l}{dx^l}\left[(x^2-1)^l\right].
-$$ --> 
+```
 
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=P_l(x)%20%3D%20%5Cfrac%7B1%7D%7B2%5Ell!%7D%5Cfrac%7Bd%5El%7D%7Bdx%5El%7D%5Cleft%5B(x%5E2-1)%5El%5Cright%5D."></div>
 
-Note that you will also find a convention in literature, where the <!-- $Y_{l,m}$ --> <img src="https://render.githubusercontent.com/render/math?math=Y_%7Bl%2Cm%7D"> are scaled by <!-- $(-1)^m$ --> <img src="https://render.githubusercontent.com/render/math?math=(-1)%5Em">. 
+
+Note that you will also find a convention in literature, where the  $`Y_{l,m}`$   are scaled by $`(-1)^m`$  . 
 
 ### Spherical Harmonics Expansions
-Each function <!-- $f:\Omega \rightarrow \mathbb R$ --> <img src="https://render.githubusercontent.com/render/math?math=f%3A%5COmega%20%5Crightarrow%20%5Cmathbb%20R"> satisfying Laplace's equation <!-- $\Delta f = 0$ --> <img src="https://render.githubusercontent.com/render/math?math=%5CDelta%20f%20%3D%200"> in a region <!-- $\Omega\subseteq\mathbb R^3$ --> <img src="https://render.githubusercontent.com/render/math?math=%5COmega%5Csubseteq%5Cmathbb%20R%5E3"> can be written as a spherical harmonic expansion
-<!-- $$
+Each function  $f:\Omega \rightarrow \mathbb R$   satisfying Laplace's equation  $\Delta f = 0$   in a region  $\Omega\subseteq\mathbb R^3$   can be written as a spherical harmonic expansion
+```math
 f(\mathbf r) = \sum_{l=0}^{\infty}\sum_{m=-l}^l c_{l,m} r^l Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)},
-$$ --> 
+```
 
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=f(%5Cmathbf%20r)%20%3D%20%5Csum_%7Bl%3D0%7D%5E%7B%5Cinfty%7D%5Csum_%7Bm%3D-l%7D%5El%20c_%7Bl%2Cm%7D%20r%5El%20Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D%2C"></div>
+<div align="center"></div>
 
-for all <!-- $\mathbf a\in\Omega$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cmathbf%20a%5Cin%5COmega">, where <!-- $\mathbf c_{l,m}\in\mathbb R^3$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cmathbf%20c_%7Bl%2Cm%7D%5Cin%5Cmathbb%20R%5E3"> denote the spherical coefficients and <!-- $r=\Vert \mathbf r \Vert_2$ --> <img src="https://render.githubusercontent.com/render/math?math=r%3D%5CVert%20%5Cmathbf%20r%20%5CVert_2">. 
+for all  $\mathbf a\in\Omega$  , where  $\mathbf c_{l,m}\in\mathbb R^3$   denote the spherical coefficients and  $r=\Vert \mathbf r \Vert_2$  . 
 
 The term 
-<!-- $$
+```math
 r^l Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)}
-$$ --> 
+```
 
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=r%5El%20Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D"></div>
+<div align="center"></div>
 
-can be transformed from spherical to Cartesian coordinates, where it can be expressed as a homogeneous polynomial of degree <!-- $l$ --> <img src="https://render.githubusercontent.com/render/math?math=l">.
+can be transformed from spherical to Cartesian coordinates, where it can be expressed as a homogeneous polynomial of degree  $l$  .
 
 ## Usage
 ### Polynomial Representation of the Spherical Harmonics
 Generate a `MultivariatePolynomials.Polynomial` representation of
-<!-- $$
+```math
 Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)}
-$$ --> 
+```
 
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D"></div>
+<div align="center"></div>
 
 in variables `α`, `β`, and `γ` on the unit sphere by
 
@@ -99,13 +95,13 @@ p = ylm(l,m,α,β,γ)
 ```
 
 The polynomial representation of
-<!-- $$
+```math
 r^l Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)}
-$$ --> 
+```
 
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=r%5El%20Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D"></div>
+<div align="center"></div>
 
-in variables `x`, `y`, and `z` on <!-- $\mathbb R^3$ --> <img src="https://render.githubusercontent.com/render/math?math=%5Cmathbb%20R%5E3"> can be obtained by
+in variables `x`, `y`, and `z` on  $\mathbb R^3$   can be obtained by
 
 ```julia
 @polyvar x y z
@@ -116,15 +112,15 @@ p = rlylm(l,m,x,y,z)
 
 ### Polynomial Representation of the Spherical Harmonics Expansions
 In case where a function is equal to or can be approximated by a **finite** Spherical harmonic expansion
-<!-- $$
+```math
 \sum_{l=0}^{L}\sum_{m=-l}^l c_{l,m} r^l Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)},
-$$ --> 
+```
 
-<div align="center"><img src="https://render.githubusercontent.com/render/math?math=%5Csum_%7Bl%3D0%7D%5E%7BL%7D%5Csum_%7Bm%3D-l%7D%5El%20c_%7Bl%2Cm%7D%20r%5El%20Y_l%5Em%7B%5Cleft(%5Cfrac%7B1%7D%7Br%7D%5C%2C%20%5Cmathbf%20r%5Cright)%7D%2C"></div>
+<div align="center"></div>
 
-with <!-- $L \in \mathbb N$ --> <img src="https://render.githubusercontent.com/render/math?math=L%20%5Cin%20%5Cmathbb%20N"> its multivariate polynomial representation has finite degree.
+with  $L \in \mathbb N$   its multivariate polynomial representation has finite degree.
 
-Coefficents <!-- $c_{l,m}$ --> <img src="https://render.githubusercontent.com/render/math?math=c_%7Bl%2Cm%7D"> can be initialized and populated by `c[l,m] = 42.0`.
+Coefficents  $c_{l,m}$   can be initialized and populated by `c[l,m] = 42.0`.
 
 ```julia
 L = 2
@@ -140,7 +136,7 @@ c = SphericalHarmonicCoefficients(C)
 f = sphericalHarmonicsExpansion(c,x,y,z)
 2.1850968611841584xz + -1.0925484305920792yz + 11.847981254502882
 ```
-Note that `SphericalHarmonicCoefficients(C)` will throw an error if `length(C)` is not <!-- $(L+1)^2$ --> <img src="https://render.githubusercontent.com/render/math?math=(L%2B1)%5E2"> for some <!-- $L\in\mathbb{N}$ --> <img src="https://render.githubusercontent.com/render/math?math=L%5Cin%5Cmathbb%7BN%7D">. From there on the corresponding polynomial  representation in cartesian coordinates `x`, `y`, and `z` can be obtained by 
+Note that `SphericalHarmonicCoefficients(C)` will throw an error if `length(C)` is not  $(L+1)^2$   for some  $L\in\mathbb{N}$  . From there on the corresponding polynomial  representation in cartesian coordinates `x`, `y`, and `z` can be obtained by 
 ```julia
 @polyvar x y z
 
@@ -164,7 +160,7 @@ sphericalHarmonicsExpansion(cTranslated,u,v,w)
 
 ### Numerical Evaluation
 
-If you want to evaluate <!-- $f$ --> <img src="https://render.githubusercontent.com/render/math?math=f"> at a specific point you can use the standard interface of `MultivariatePolynomials`
+If you want to evaluate  $f$   at a specific point you can use the standard interface of `MultivariatePolynomials`
 
 ```julia
 f(x=>0.5, y=>-1.0, z=>0.25)
@@ -173,7 +169,7 @@ f((x,y,z)=>(0.5,-1.0,0.25))
 12.394255469798921
 ```
 
-In case where you want to evaluate <!-- $f$ --> <img src="https://render.githubusercontent.com/render/math?math=f"> for a large number of points you might run into performance issues. To this end we provide two methods to dynamically generate fast evaluating functions. Either use
+In case where you want to evaluate  $f$   for a large number of points you might run into performance issues. To this end we provide two methods to dynamically generate fast evaluating functions. Either use
 
 ```julia
 g = @fastfunc f
