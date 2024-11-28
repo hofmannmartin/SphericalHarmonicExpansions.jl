@@ -14,7 +14,7 @@ TypedPolynomials = "afbbf031-7a57-5f58-a1b9-b774a0fad08d"
 
 [compat]
 Combinatorics = "1.0"
-HDF5 = "0.16"
+HDF5 = "0.16, 0.17"
 MultivariatePolynomials = "0.4, 0.5"
 Reexport = "1.0"
 StaticPolynomials = "1.3"
