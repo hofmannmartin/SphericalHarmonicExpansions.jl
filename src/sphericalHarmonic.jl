@@ -14,12 +14,12 @@ end
 
 function ylmCosSinPolynomial(m, x, y)
 	terms = [((-1)^j)*binomial(m, 2*j)*y^(2*j)*x^(m-2*j) for j in 0:floor(Int,m/2)]
-	return Polynomial(terms)
+	return polynomial(terms)
 end
 
 function ylmSinSinPolynomial(m, x, y)
 	terms = [((-1)^j)*binomial(m, 2*j + 1)*y^(2*j + 1)*x^(m-2*j-1) for j in 0:floor(Int,(m-1)/2)]
-	return Polynomial(terms)
+	return polynomial(terms)
 end
 
 """
@@ -38,7 +38,7 @@ function ylm(l, m, x, y, z)
 	end
 
 	terms = [Float64((-1)^k*binomial(l,k))*z^(2*(l-k)) for k=0:ceil(Int,(l-abs(m))/2)]
-	p = Polynomial(terms) + 0.0*(x+y)
+	p = polynomial(terms) + 0.0*(x+y)
 	for i = 1:l+abs(m)
 		c = i <= l ? 1/(2*i) : 1.0
 		p = c*differentiate(p, z, Val{1}())
