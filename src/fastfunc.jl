@@ -56,7 +56,7 @@ macro fastfunc(polynomial)
 		local polystr = string($(esc(polynomial)))
 		local vars = string(tuple(variables($(esc(polynomial)))...))
         # create expression for function definition
-		eval(Meta.parse(vars*" -> @fastmath "*polystr))
+		@eval($(Expr(:$,:(Meta.parse(vars*" -> @fastmath "*polystr)))))
 	end
 end
 
