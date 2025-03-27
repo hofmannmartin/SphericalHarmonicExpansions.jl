@@ -20,4 +20,8 @@ include("sphericalQuadrature.jl")
 include("translation.jl")
 export translation
 
+using WignerD # Wigner d matrix
+include("rotation.jl")
+export rotation, pointReflection
+
 end # module
