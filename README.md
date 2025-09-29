@@ -10,19 +10,20 @@ The purpose of this package is to provide methods to numerically handle real sph
 
 ## Table of Contents
 
-- [Mathematical Background](#mathematical-background)
-  - [Definition of the Spherical Harmonics](#definition-of-the-spherical-harmonics)
-  - [Spherical Harmonics Expansions](#spherical-harmonics-expansions)
-- [Usage](#usage)
-  - [Polynomial Representation of the Spherical Harmonics](#polynomial-representation-of-the-spherical-harmonics)
-  - [Polynomial Representation of the Spherical Harmonics Expansions](#polynomial-representation-of-the-spherical-harmonics-expansions)
-  - [Transformation of Expansion Coefficients under Translation](#transformation-of-expansion-coefficients-under-translation)
-  - [Numerical Evaluation](#numerical-valuation)
-- [Further Reading](#further-reading)
+- [1. Mathematical Background](#1-mathematical-background)
+  - [1.1. Definition of the Spherical Harmonics](#11-definition-of-the-spherical-harmonics)
+  - [1.2. Spherical Harmonics Expansions](#12-spherical-harmonics-expansions)
+- [2. Usage](#2-usage)
+  - [2.1. Polynomial Representation of the Spherical Harmonics](#21-polynomial-representation-of-the-spherical-harmonics)
+  - [2.2. Polynomial Representation of the Spherical Harmonics Expansions](#22-polynomial-representation-of-the-spherical-harmonics-expansions)
+  - [2.3. Transformation of Expansion Coefficients under Translation](#23-transformation-of-expansion-coefficients-under-translation)
+  - [2.4. Transformation of Expansion Coefficients under Rotation](#24-transformation-of-expansion-coefficients-under-rotation)
+  - [2.5. Numerical Evaluation](#25-numerical-evaluation)
+- [3. Further Reading](#3-further-reading)
 
-## Mathematical Background
+## 1. Mathematical Background
 
-### Definition of the Spherical Harmonics
+### 1.1. Definition of the Spherical Harmonics
 
 The normalized real spherical harmonics on the unit sphere are defined by 
 ```math
@@ -54,7 +55,7 @@ P_l(x) = \frac{1}{2^ll!}\frac{d^l}{dx^l}\left[(x^2-1)^l\right].
 
 Note that you will also find a convention in literature, where the  $`Y_{l,m}`$   are scaled by $`(-1)^m`$  . 
 
-### Spherical Harmonics Expansions
+### 1.2. Spherical Harmonics Expansions
 Each function  $f:\Omega \rightarrow \mathbb R$   satisfying Laplace's equation  $\Delta f = 0$   in a region  $\Omega\subseteq\mathbb R^3$   can be written as a spherical harmonic expansion
 ```math
 f(\mathbf r) = \sum_{l=0}^{\infty}\sum_{m=-l}^l c_{l,m} r^l Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)},
@@ -73,8 +74,8 @@ r^l Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)}
 
 can be transformed from spherical to Cartesian coordinates, where it can be expressed as a homogeneous polynomial of degree  $l$  .
 
-## Usage
-### Polynomial Representation of the Spherical Harmonics
+## 2. Usage
+### 2.1. Polynomial Representation of the Spherical Harmonics
 Generate a `MultivariatePolynomials.Polynomial` representation of
 ```math
 Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)}
@@ -110,7 +111,7 @@ p = rlylm(l,m,x,y,z)
 6.63799038667474x⁵yz + 13.27598077334948x³y³z - 35.40261539559861x³yz³ + 6.63799038667474xy⁵z - 35.40261539559861xy³z³ + 21.24156923735917xyz⁵
 ```
 
-### Polynomial Representation of the Spherical Harmonics Expansions
+### 2.2. Polynomial Representation of the Spherical Harmonics Expansions
 In case where a function is equal to or can be approximated by a **finite** Spherical harmonic expansion
 ```math
 \sum_{l=0}^{L}\sum_{m=-l}^l c_{l,m} r^l Y_l^m{\left(\frac{1}{r}\, \mathbf r\right)},
@@ -133,21 +134,19 @@ Internally, the coefficients are lexicographically stored in a vector (`c[0,0]`,
 ```julia
 C = [42.0,0,0,0,0,-1,0,2,0]
 c = SphericalHarmonicCoefficients(C)
-f = sphericalHarmonicsExpansion(c,x,y,z)
-2.1850968611841584xz + -1.0925484305920792yz + 11.847981254502882
 ```
-Note that `SphericalHarmonicCoefficients(C)` will throw an error if `length(C)` is not  $(L+1)^2$   for some  $L\in\mathbb{N}$  . From there on the corresponding polynomial  representation in cartesian coordinates `x`, `y`, and `z` can be obtained by 
+Note that `SphericalHarmonicCoefficients(C)` will throw an error if `length(C)` is not  $(L+1)^2$   for some  $L\in\mathbb{N}$. From there on the corresponding polynomial  representation in Cartesian coordinates `x`, `y`, and `z` can be obtained by 
 ```julia
 @polyvar x y z
 
 f = sphericalHarmonicsExpansion(c,x,y,z)
-2.1850968611841584xz - 1.0925484305920792yz + 11.847981254502882
+11.847981254502882 - 1.0925484305920792yz + 2.1850968611841584xz
 ```
 Currently, expansions up to $L=66$ are supported.
 
-### Transformation of Expansion Coefficients under Translation
+### 2.3. Transformation of Expansion Coefficients under Translation
 
-If we change from a coordinate sytsem with coordinates `x`, `y`, and `z` into a translated one with new coordinates `u = x + tx`, `v = y + ty`, and `w = z + tz` we need transformed coefficients to express the expansion in these new coordinates. To this end, we can do 
+If we change from a coordinate system with coordinates `x`, `y`, and `z` into a translated one with new coordinates `u = x + tx`, `v = y + ty`, and `w = z + tz` we need transformed coefficients to express the expansion in these new coordinates. To this end, we can do 
 
 ```julia
 @polyvar u v w
@@ -155,10 +154,33 @@ translationVector = [0,0,1.0] # [tx,ty,tz]
 
 cTranslated = translation(c,translationVector)
 sphericalHarmonicsExpansion(cTranslated,u,v,w)
-2.1850968611841584uw - 1.0925484305920792vw + 2.1850968611841584u - 1.0925484305920792v + 11.847981254502878
+11.847981254502878 - 1.0925484305920792v + 2.1850968611841584u - 1.092548430592079vw + 2.185096861184158uw
 ```
 
-### Numerical Evaluation
+### 2.4. Transformation of Expansion Coefficients under Rotation
+
+Furthermore, any rotation of the coordinate system can be expressed with rotated coefficients. Rotation of a coordinate system with coordinates `x`, `y`, and `z` into a rotated system with coordinates `(r₁, r₂, r₃) = R * [x, y, z]`, using a rotation matrix `R = RotZYZ(eulerAngles...)` provided by [Rotations.jl](https://github.com/JuliaGeometry/Rotations.jl), can be obtained by a rotation of the coefficients with
+
+```julia
+@polyvar r₁ r₂ r₃
+rotationAngles = [π/2, -π, 0] # ZYZ-convention (Euler angles)
+
+cRotated = rotation(c, rotationAngles)
+sphericalHarmonicsExpansion(cRotated, r₁,r₂,r₃)
+11.847981254502882 + 2.185096861184156r₂r₃ - 1.0925484305920796r₁r₃
+```
+
+Combining the rotation with a point reflection and translation, any reflections of the coordinate system can be represented. For example, a reflection of the coordinate system with coordinates `x`, `y`, and `z` in the xz-plane yielding a coordinates `x`, `y⁻ = -y`, and `z` can be expressed in the coefficients using
+
+```julia
+@polyvar y⁻
+        
+cReflected = rotation(pointReflection(c), [0,pi,0]);
+sphericalHarmonicsExpansion(cReflected, x, y⁻, z)
+11.847981254502882 + 1.0925484305920798y⁻z + 2.185096861184156xz
+```
+
+### 2.5. Numerical Evaluation
 
 If you want to evaluate  $f$   at a specific point you can use the standard interface of `MultivariatePolynomials`
 
@@ -185,6 +207,6 @@ h(0.5,-1.0,0.25)
 ```
 which uses `GeneralizedGenerated` for function generation and comes with a significant overhead.
 
-## Further Reading
+## 3. Further Reading
 
 For more informations on the `MultivariatePolynomials` package please visit the project page on [github](https://github.com/JuliaAlgebra/MultivariatePolynomials.jl).
