@@ -8,7 +8,7 @@
 *Output:*
 - `c_rot::SphericalHarmonicCoefficients`: Rotated spherical harmonic coefficients
 """
-function rotation(shc::SphericalHarmonicCoefficients, rot::Array{Float64,1})
+function rotation(shc::SphericalHarmonicCoefficients, rot::AbstractArray{<:Real,1})
   shc_rot = deepcopy(shc)
 
   # run through all coefficients
