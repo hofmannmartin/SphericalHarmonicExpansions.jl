@@ -9,7 +9,7 @@
 - `cT` - Translated coefficients, type: SphericalHarmonicCoefficients (cT.R = C.R, cT.solid = C.solid)
 
 """
-function translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1})
+function translation(C::SphericalHarmonicCoefficients,v::AbstractArray{<:Real,1})
 
     @polyvar x y z
 
@@ -150,7 +150,7 @@ function translation(C::SphericalHarmonicCoefficients,v::Array{Float64,1})
 end
 
 ## prefactors
-function σ(l,m,λ,μ,num::Int)
+function σ(l,m,λ,μ,num::Integer)
   σ = sqrt((factorial(l+m) * factorial(l-m)) / (factorial(λ+μ) * factorial(λ-μ) * factorial(l-λ+m-μ) * factorial(l-λ-m+μ)))
   if num == 1
     σ *= (μ != 0 && μ != m && m != 0) ? 1/sqrt(2) : 1
@@ -164,7 +164,7 @@ function σ(l,m,λ,μ,num::Int)
   return σ
 end
 
-function translateRlm(l::Int64, m::Int64,vx,vy,vz)
+function translateRlm(l::Integer, m::Integer,vx,vy,vz)
 
     @polyvar x y z
 

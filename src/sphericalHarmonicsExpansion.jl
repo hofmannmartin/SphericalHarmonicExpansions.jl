@@ -1,94 +1,66 @@
 import Base.setindex!, Base.getindex, Base.isapprox, Base.==, Base.!=,
         Base.+, Base.-, Base.*, Base./, Base.write
 
-mutable struct SphericalHarmonicCoefficients
-  c::Vector{T} where T<:Real
-  L::Int
-  R::Float64
+mutable struct SphericalHarmonicCoefficients{T<:Real}
+  c::AbstractVector{T}
+  L::Integer
+  R::Real
   solid::Bool
 
-  function SphericalHarmonicCoefficients(c::Vector{T} where T<:Real)
+  function SphericalHarmonicCoefficients(c::AbstractVector{T}, L::Real, R::Real,solid::Bool) where T<:Real
+    if L<0 || !isinteger(L)
+      throw(DomainError(L,"L ∈ ℕ₀ required, but is $L"))
+    end
     if (!isinteger(sqrt(length(c))) || length(c)==0)
       throw(DomainError(sqrt(length(c)),"Input vector needs to be of size (L+1)², where L ∈ ℕ₀."))
-    end
-
-    L = convert(Int,sqrt(length(c)))-1
-    return new(c,L,1.0,false)
+    end 
+    return new{T}(c,L,R,solid)
   end
 
-  function SphericalHarmonicCoefficients(L::Int)
-    if L<0
-      throw(DomainError(L,"Input vector needs to be of size (L+1)², where L ∈ ℕ₀."))
-    end
-    return new(zeros((L+1)^2),UInt(L),1.0,false)
-  end
+  SphericalHarmonicCoefficients(c::AbstractVector{<:Real}) = SphericalHarmonicCoefficients(c, sqrt(length(c))-1, 1.0, false)
+  
+  SphericalHarmonicCoefficients(L::Integer) = SphericalHarmonicCoefficients(zeros((L+1)^2), L, 1.0, false)
 
-  function SphericalHarmonicCoefficients(L::Int,R::Float64,solid::Bool)
-    if L<0
-      throw(DomainError(L,"Input vector needs to be of size (L+1)², where L ∈ ℕ₀."))
-    end
-    return new(zeros((L+1)^2),UInt(L),R,solid)
-  end
+  SphericalHarmonicCoefficients(L::Int,R::Real,solid::Bool) = SphericalHarmonicCoefficients(zeros((L+1)^2), L, R, solid)
 
-  function SphericalHarmonicCoefficients(c::Vector{T} where T<:Real,R::Float64,solid::Bool)
-    if (!isinteger(sqrt(length(c))) || length(c)==0)
-       throw(DomainError(sqrt(length(c)),"Input vector needs to be of size (L+1)², where L ∈ ℕ₀."))
-    end
+  SphericalHarmonicCoefficients(c::AbstractVector{<:Real},R::Float64,solid::Bool) = SphericalHarmonicCoefficients(c,sqrt(length(c))-1,R,solid)
 
-    L = convert(Int,sqrt(length(c)))-1
-    return new(c,L,R,solid)
-  end
-
-  function SphericalHarmonicCoefficients(c::Array{Vector{T}} where T<:Real,R::Array{Float64},solid::BitArray)
+  function SphericalHarmonicCoefficients(c::AbstractArray{<:AbstractVector{T}},R::AbstractArray{<:Real},solid::AbstractArray{<:Bool}) where T<:Real
     if size(c) != size(R) || size(c) != size(solid)
-       throw(DomainError(size(c),"Arrays do not have the same size."))
-    end
-    for co in c
-	if (!isinteger(sqrt(length(co))) || length(co)==0)
-           throw(DomainError(sqrt(length(co)),"Input vectors need to be of size (L+1)², where L ∈ ℕ₀."))
-        end
+      throw(DomainError(size(c),"Arrays do not have the same size."))
     end
 
-    L = [convert(Int,sqrt(length(co)))-1 for co in c]
-    return reshape([new(c[n],L[n],R[n],solid[n]) for n in eachindex(c)],size(c)...)
+    L = [sqrt(length(co))-1 for co in c]
+    return reshape([SphericalHarmonicCoefficients(c[n],L[n],R[n],solid[n]) for n in eachindex(c)],size(c)...)
   end
 
-  function SphericalHarmonicCoefficients(c::Array{Vector{T}} where T<:Real,R::Float64,solid::Bool)
-      for co in c
-	  if (!isinteger(sqrt(length(co))) || length(co)==0)
-             throw(DomainError(sqrt(length(co)),"Input vectors need to be of size (L+1)², where L ∈ ℕ₀."))
-          end
+  SphericalHarmonicCoefficients(c::AbstractArray{<:AbstractVector{<:Real}},R::T,solid::Bool)  where T<:Real = SphericalHarmonicCoefficients(c,fill(R, size(c)),fill(solid, size(c)) )
+
+  # write and read coefficients to/from an HDF5-file
+  function SphericalHarmonicCoefficients(path::String)
+    coeffs, R, solid = h5open(path,"r") do file
+      coeffsArray = read(file, "/coeffs")
+      R = read(file, "/normalization")
+      solid = (read(file, "/solid") .== 1)
+
+      if size(coeffsArray)[1:end-1] == ()
+        coeffs = Array{Vector{Float64}}(undef,1)
+      else
+        coeffs = Array{Vector{Float64}}(undef,size(coeffsArray)[1:end-1])
+      end
+      coeffsArray = reshape(coeffsArray,(Int(length(coeffsArray)/size(coeffsArray)[end]),size(coeffsArray)[end]))
+      for n in axes(coeffsArray,1)
+        coeffs[n] = coeffsArray[n,:]
       end
 
-    L = [convert(Int,sqrt(length(co)))-1 for co in c]
-    return reshape([new(c[n],L[n],R,solid) for n in eachindex(c)],size(c)...)
+      return coeffs, R, solid
+    end
+
+    return SphericalHarmonicCoefficients(coeffs, R, solid)
   end
 end
 
-# write and read coefficients to/from an HDF5-file
-function SphericalHarmonicCoefficients(path::String)
-  coeffs, R, solid = h5open(path,"r") do file
-    coeffsArray = read(file, "/coeffs")
-    R = read(file, "/normalization")
-    solid = (read(file, "/solid") .== 1)
-
-    if size(coeffsArray)[1:end-1] == ()
-      coeffs = Array{Vector{Float64}}(undef,1)
-    else
-      coeffs = Array{Vector{Float64}}(undef,size(coeffsArray)[1:end-1])
-    end
-    coeffsArray = reshape(coeffsArray,(Int(length(coeffsArray)/size(coeffsArray)[end]),size(coeffsArray)[end]))
-    for n=1:size(coeffsArray,1)
-      coeffs[n] = coeffsArray[n,:]
-    end
-
-    return coeffs, R, solid
-  end
-
-  return SphericalHarmonicCoefficients(coeffs, R, solid)
-end
-
-function write(path::String, coeffs::Array{SphericalHarmonicCoefficients})
+function write(path::String, coeffs::AbstractArray{<:SphericalHarmonicCoefficients})
 
   if size(coeffs) != (1,)
       coeffsArray = coeffs[1].c'
@@ -128,52 +100,52 @@ setindex!(shc::SphericalHarmonicCoefficients,value,l,m) = setindex!(shc.c,value,
 +(value, shc::SphericalHarmonicCoefficients) = +(shc::SphericalHarmonicCoefficients, value)
 -(value, shc::SphericalHarmonicCoefficients) = SphericalHarmonicCoefficients(value .- shc.c,shc.R,shc.solid)
 *(value, shc::SphericalHarmonicCoefficients) = *(shc::SphericalHarmonicCoefficients, value)
-LinearAlgebra.normalize(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] * 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R/R,shc.solid)
-LinearAlgebra.normalize!(shc::SphericalHarmonicCoefficients,R::Float64) = SphericalHarmonicCoefficients([shc[l,m] *= 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R /= R,shc.solid)
+LinearAlgebra.normalize(shc::SphericalHarmonicCoefficients,R::AbstractFloat) = SphericalHarmonicCoefficients([shc[l,m] * 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R/R,shc.solid)
+LinearAlgebra.normalize!(shc::SphericalHarmonicCoefficients,R::AbstractFloat) = SphericalHarmonicCoefficients([shc[l,m] *= 1/(R^l) for l = 0:shc.L for m = -l:l],shc.R /= R,shc.solid)
 
 function +(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients)
-    if shca.R != shcb.R
-	throw(DomainError(shca.R,"Coefficients do not have the same normalization factor."))
-    end
-    if shca.solid != shcb.solid
-        throw(DomainError(shca.solid,"Coefficients do not have the same type."))
-    end
-    return SphericalHarmonicCoefficients(shca.c + shcb.c,shca.R,shca.solid)
+  if shca.R != shcb.R
+	  throw(DomainError(shca.R,"Coefficients do not have the same normalization factor."))
+  end
+  if shca.solid != shcb.solid
+    throw(DomainError(shca.solid,"Coefficients do not have the same type."))
+  end
+  return SphericalHarmonicCoefficients(shca.c + shcb.c,shca.R,shca.solid)
 end
 function -(shca::SphericalHarmonicCoefficients, shcb::SphericalHarmonicCoefficients)
-    if shca.R != shcb.R
-        throw(DomainError(shca.R,"Coefficients do not have the same normalization factor."))
-    end
-    if shca.solid != shcb.solid
-        throw(DomainError(shca.solid,"Coefficients do not have the same type."))
-    end
-    return SphericalHarmonicCoefficients(shca.c - shcb.c,shca.R,shca.solid)
+  if shca.R != shcb.R
+    throw(DomainError(shca.R,"Coefficients do not have the same normalization factor."))
+  end
+  if shca.solid != shcb.solid
+    throw(DomainError(shca.solid,"Coefficients do not have the same type."))
+  end
+  return SphericalHarmonicCoefficients(shca.c - shcb.c,shca.R,shca.solid)
 end
 
 ## Convertions ##
 # convert spherical coefficients to solid coefficients
 function solid!(shc::SphericalHarmonicCoefficients)
-    if !(shc.solid)
-        for l = 0:shc.L
-            for m = -l:l
-                shc[l,m] *= sqrt((2*l+1)/(4*pi))
-            end
-        end
-        shc.solid = true
+  if !(shc.solid)
+    for l = 0:shc.L
+      for m = -l:l
+        shc[l,m] *= sqrt((2*l+1)/(4*pi))
+      end
     end
-    return shc
+    shc.solid = true
+  end
+  return shc
 end
 # convert solid coefficients to spherical coefficients
 function spherical!(shc::SphericalHarmonicCoefficients)
-    if shc.solid
-        for l = 0:shc.L
-            for m = -l:l
-                shc[l,m] *= sqrt(4*pi/(2*l+1))
-            end
-        end
-        shc.solid = false
+  if shc.solid
+    for l = 0:shc.L
+      for m = -l:l
+        shc[l,m] *= sqrt(4*pi/(2*l+1))
+      end
     end
-    return shc
+    shc.solid = false
+  end
+  return shc
 end
 
 """
@@ -185,20 +157,17 @@ end
 *Output:*  Spherical/Solid harmonics expansion
 """
 function sphericalHarmonicsExpansion(Clm::SphericalHarmonicCoefficients, x::Variable, y::Variable, z::Variable)
-
   sum = 0
-
-  for l in 0:Clm.L
-    for m in -l:l
-      if Clm[l,m] != 0
-          if Clm.solid
-              # solid expansion
-              sum += Clm[l,m] * zlm(l,m,x,y,z)
-          else
-              # spherical expansion
-              sum += Clm[l,m] * rlylm(l,m,x,y,z)
-          end
-      end
+  for l in 0:Clm.L, m in -l:l
+    if Clm[l,m] == 0
+      continue
+    end
+    if Clm.solid
+      # solid expansion
+      sum += Clm[l,m] * zlm(l,m,x,y,z)
+    else
+      # spherical expansion
+      sum += Clm[l,m] * rlylm(l,m,x,y,z)
     end
   end
   return sum
